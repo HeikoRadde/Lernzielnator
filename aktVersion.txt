@@ -1,2 +1,2 @@
 Version: 1.0
-Dwonload: https://github.com/HeikoRadde/Lernzielnator
+Download: https://github.com/HeikoRadde/Lernzielnator
