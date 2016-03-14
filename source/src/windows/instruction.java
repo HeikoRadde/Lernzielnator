@@ -22,25 +22,31 @@ public class instruction extends JFrame {
 
 	private JPanel contentPane;
 	
-	private String txtImportData = new String("Dieses Programm kann Lernziele, Veranstaltungen, Module und Semester importieren, wenn sie in einer .csv Datei gespeichert sind. "
-			+ "Um Daten zu importieren müssen Sie also zunächst eine.csv Datei erstellen.\n"
-			+ "Hierzu laden Sie als erstes das Modul als Excel-Datei herunter. Öffnen Sie die Datei Excel oder einem anderen Programm zur Tabellenerstellung. "
-			+ "Nun müssen Sie die Datei neu speichern. Wählen Sie hierzu \"Speichern\" oder \"Speichern unter\" aus. "
-			+ "Bei älteren Excel-Versionen müssen Sie nun eventuell \"Andere Formate\" auswählen."
-			+ "Im nun erscheinenden Dialog wählen Sie unter Dateityp \"CSV\" aus. "
-			+ "Achten Sie darauf, dass Sie nicht den Eintrag mit \"MS-DOS\" auswählen, hier würden die Umlaute nicht korrekt gespeichert.\n"
-			+ "Nun haben Sie die Tabelle im .csv-Format exportiert und können sie nun entweder über den Menüeintrag \"Laden\" laden oder über \"Importieren\" zum vorhandenen Datensatz hinzufügen.");
+	private String txtImportData = new String("Dieses Programm kann vom einzelnen Lernziel bis zum ganzen Semester alles importieren, was in einer .csv Datei gespeichert ist.\n"
+			+ "Hierzu lädst du zuerst das gewünschte Modul als Excel-Datei von der Lernzielplattform herunter. "
+			+ "Nun gehst du auf „Speichern unter“ und wählst als Dateityp „CSV“ aus.\n"
+			+ "(Achte darauf, nicht den Eintrag mit „MS-DOS“ zu nehmen).");
 	
-	private String txtShortcuts = new String("Dieses Programm unterstützt mehrere Shortcuts. "
-			+ "Das bedeutet, dass Sie nicht immer über das Menü die Daten bearbeiten müssen."
-			+ "Folgende Shortcuts besitzt dieses Programm:\n"
+	private String txtShortcuts = new String("Praktisch! Schnell! Cool!\n"
 			+ "[S] --> Speichern\n"
 			+ "[i] --> Importieren\n"
-			+ "[K] --> \"Karteikarten\" aktivieren/deaktivieren\n"
-			+ "[A] --> \"Ausarbeitung\" aktivieren/deaktivieren\n"
-			+ "[L] --> \"Lerngruppe\" aktivieren/deaktivieren\n"
+			+ "[1] --> \"Ausarbeitung\" aktivieren/deaktivieren\n"
+			+ "[2] --> \"Karteikarten\" aktivieren/deaktivieren\n"
+			+ "[3] --> \"Lerngruppe\" aktivieren/deaktivieren\n"
 			+ "[R] --> \"Relevant\" aktivieren/deaktivieren");
 	
+	private String txtLoadData = new String("Am Einfachsten speicherst du alles immer in derselben .csv Datei, die du nennen kannst, wie du willst.\n"
+			+ "Dafür will diese Datei dann auch nicht von dir gelöscht werden. "
+			+ "Sondern jedes Mal wieder geladen.");
+	
+	private String txtExport = new String("Möchtest du von einzelnen Semestern/Modulen deinen Lernfortschritt, "
+			+ "deine Notizen oder selbst erstellten Lernziele mit deinen Kommilitonen teilen, kannst du sie als .csv exportieren.");
+	
+	private String txtMisc = new String("DER KLEINE WEIßE STREIFEN IM PIE-CHART\n"
+			+ "Da das Programm nicht rundet sondern immer einige Ziffern hinter dem Komma abschneidet, kommt man bei der Addition aller Zahlen in seinem schönen Tortendiagramm nie auf die vollen 100%.\n"
+			+ "\n"
+			+ "Heiko hat für seine ~5400 Zeilen Code zwei Tafeln Schokolade bekommen.");
+		//TODO: Update Lines of code ^
 	/**
 	 * Launch the application.
 	 */
@@ -63,13 +69,13 @@ public class instruction extends JFrame {
 	public instruction(final JFrame frame) {
 		this.setLocationRelativeTo(frame);
 		setAlwaysOnTop(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 500, 400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
-		String components[] = { "Import von Daten", "Shortcuts"};
+		String components[] = { "IMPORT", "LADEN", "SHORTCUTS", "EXPORT", "MISC."};
 		contentPane.setLayout(new GridLayout(1, 1, 0, 0));
 		
 		JSplitPane splitPane = new JSplitPane();
@@ -80,7 +86,7 @@ public class instruction extends JFrame {
 		//txtInfo.setFont(times);
 		txtInfo.setLineWrap(true);
 		txtInfo.setWrapStyleWord(true);
-		txtInfo.setText("Wilkommen im Hilfe-Menü.\r\nBitte w\u00E4hlen Sie links ein Thema aus, \u00FCber das Sie mehr erfahren wollen.");
+		txtInfo.setText("Wilkommen im Hilfe-Men\u00FC.\r\nBitte w\u00E4hle links ein Thema aus, \u00FCber das du mehr erfahren m\u00F6chtest.\nWenn du neu hier bist, solltet du als Erstes Daten importieren");
 		splitPane.setRightComponent(txtInfo);
 		JList list = new JList(components);
 		list.addListSelectionListener(new ListSelectionListener() {
@@ -91,7 +97,17 @@ public class instruction extends JFrame {
 					txtInfo.setText(txtImportData);
 					break;
 				case 1:
+					txtInfo.setText(txtLoadData);
+					break;
+				case 2:
 					txtInfo.setText(txtShortcuts);
+					break;
+				case 3:
+					txtInfo.setText(txtExport);
+					break;
+				case 4:
+					txtInfo.setText(txtMisc);
+					break;
 				}
 			}
 		});

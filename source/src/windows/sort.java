@@ -34,7 +34,7 @@ public class sort extends JDialog {
 	 * Create the dialog.
 	 */
 	public sort(final JFrame frame, final mainWindow mainWindow) {
-		setBounds(100, 100, 450, 220);
+		setBounds(100, 100, 450, 202);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -49,7 +49,7 @@ public class sort extends JDialog {
 		txtrHelp.setEditable(false);
 		txtrHelp.setLineWrap(true);
 		txtrHelp.setWrapStyleWord(true);
-		txtrHelp.setText("Hier kann ausgew\u00E4hlt werden, was alphabetisch sortiert werden soll. Wenn z.B. \"Module\" ausgew\u00E4hlt wird, werden die Module _aller_ Semester sortiert. Analog wird bei den anderen Wahlen sortiert.\r\nWenn z.B. nur die Module eines einzelnen Semesters sortiert werden sollen, muss bei Auswahl des Semesters im Baum Sortieren per Rechtsklick aufgerufen werden.");
+		txtrHelp.setText("Hier kann ausgew\u00E4hlt werden, was alphabetisch sortiert werden soll. \r\nWenn z.B. \"Module\" ausgew\u00E4hlt wird, werden die Module aller Semester sortiert. \r\nWenn z.B. nur die Module eines einzelnen Semesters alphabetisch sortiert werden sollen, kannst du die Funktion im Baum per Rechtsklick aufrufen. \r\n");
 		txtrHelp.setBounds(121, 11, 303, 207);
 		contentPanel.add(txtrHelp);
 		{

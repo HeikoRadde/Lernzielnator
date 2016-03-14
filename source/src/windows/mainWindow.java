@@ -14,6 +14,7 @@ import javax.swing.JTextArea;
 import java.awt.GridBagLayout;
 import net.miginfocom.swing.MigLayout;
 import util.CustomDefaultMutableTreeNode;
+import util.CustomJTree;
 import util.LZ_Dimension;
 import util.LZ_Kognitionsdimension;
 import util.MyTreeCellRenderer;
@@ -21,6 +22,7 @@ import util.MyTreeCellRenderer;
 import javax.net.ssl.HttpsURLConnection;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.ActionMap;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.InputMap;
@@ -100,6 +102,7 @@ import javax.swing.JComponent;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class mainWindow {
 	
@@ -120,10 +123,9 @@ public class mainWindow {
 	public Boolean changed = new Boolean(false);
 	public CustomDefaultMutableTreeNode aktNode;
 	private JPopupMenu popup = new JPopupMenu();
-	private String aktFile;
 	
 	private static JFrame frmLernzielnator;
-	private JTree tree;
+	private CustomJTree tree;
 	CustomDefaultMutableTreeNode top;
 	private JTextArea textField_Description;
 	private JTextArea textField_Notes;
@@ -240,7 +242,7 @@ public class mainWindow {
 		    @Override
 		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
 		        if (JOptionPane.showConfirmDialog(getFrmLernzielnator(), 
-		            "Haben Sie gespeichert was Sie speichern wollen?", "Wirklich schließen?", 
+		            "Hast du gespeichert, was du speichern wollen?", "Wirklich schließen?", 
 		            JOptionPane.YES_NO_OPTION,
 		            JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
 		            System.exit(0);
@@ -263,7 +265,7 @@ public class mainWindow {
 		JScrollPane scrollPane = new JScrollPane();
 		panelLeft.add(scrollPane);
 		
-		tree = new JTree();
+		tree = new CustomJTree();
 		tree.setBackground(Color.WHITE);
 		tree.setCellRenderer(new MyTreeCellRenderer());
 		javax.swing.ToolTipManager.sharedInstance().registerComponent(tree);
@@ -285,31 +287,37 @@ public class mainWindow {
 				
 			}
 		});
-		//TODO. shortcuts for tree
-		/*
-		 + "[S] --> Speichern\n"
-		+ "[i] --> Importieren\n"
-		+ "[K] --> \"Karteikarten\" aktivieren/deaktivieren\n"
-		+ "[A] --> \"Ausarbeitung\" aktivieren/deaktivieren\n"
-		+ "[L] --> \"Lerngruppe\" aktivieren/deaktivieren\n"
-		+ "[R] --> \"Relevant\" aktivieren/deaktivieren");
-		*/
-		InputMap inputMap = tree.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 		
+		/*
+		+ "[S] --> Speichern\n"
+		+ "[i] --> Importieren\n"
+		+ "[1] --> \"Ausarbeitung\" aktivieren/deaktivieren\n"
+		+ "[2] --> \"Karteikarten\" aktivieren/deaktivieren\n"
+		+ "[3] --> \"Lerngruppe\" aktivieren/deaktivieren\n"
+		+ "[R] --> \"Relevant\" aktivieren/deaktivieren");
+		*/		
 		//Shortcut Speichern
 		@SuppressWarnings("serial")
 		Action sPressedAction = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				if(aktLernzielnator.getSemesterListeSize() > 0){
 					try{
-						if( (aktFile != null) && (!aktFile.isEmpty()) ){
-							File fileToBeSaved = new File(aktFile);
+						if( (aktLernzielnator.getAktFile() != null) && (!aktLernzielnator.getAktFile().isEmpty()) ){
+							File fileToBeSaved = new File(aktLernzielnator.getAktFile());
 							aktLernzielnator.saveFile(fileToBeSaved);
+							//Display Info Message
+							JOptionPane pane = new JOptionPane(null);
+						    //configure
+							pane.setMessageType(JOptionPane.INFORMATION_MESSAGE );
+							pane.setMessage("Gespeichert unter:\n" + aktLernzielnator.getAktFile());					
+						    JDialog dialogSaved = pane.createDialog("Gespeichert");
+						    dialogSaved.setLocation(getFrmLernzielnator().getLocation().x +  + (getFrmLernzielnator().getWidth()/2) - (dialogSaved.getBounds().width/2) , getFrmLernzielnator().getLocation().y + (getFrmLernzielnator().getHeight()/2) - (dialogSaved.getBounds().height/2) );
+						    dialogSaved.setVisible(true);
 						}
 						else{
 							JFileChooser fc = new JFileChooser();
-							if(aktFile != null && (!aktFile.isEmpty())){
-								fc = new JFileChooser(aktFile);
+							if(aktLernzielnator.getAktFile() != null && (!aktLernzielnator.getAktFile().isEmpty())){
+								fc = new JFileChooser(aktLernzielnator.getAktFile());
 							}
 							fc.setFileFilter(new customFileFilter());					
 							int returnVal = fc.showSaveDialog(getFrmLernzielnator());
@@ -331,10 +339,10 @@ public class mainWindow {
 								JOptionPane pane = new JOptionPane(null);
 							    //configure
 								pane.setMessageType(JOptionPane.INFORMATION_MESSAGE );
-								pane.setMessage("Gespeichert unter:\n" + aktFile);					
-							    JDialog dialogError = pane.createDialog("Gespeichert");
-							    dialogError.setLocation(getFrmLernzielnator().getLocation().x +  + (getFrmLernzielnator().getWidth()/2) - (dialogError.getBounds().width/2) , getFrmLernzielnator().getLocation().y + (getFrmLernzielnator().getHeight()/2) - (dialogError.getBounds().height/2) );
-							    dialogError.setVisible(true);
+								pane.setMessage("Gespeichert unter:\n" + aktLernzielnator.getAktFile());					
+							    JDialog dialogSaved = pane.createDialog("Gespeichert");
+							    dialogSaved.setLocation(getFrmLernzielnator().getLocation().x +  + (getFrmLernzielnator().getWidth()/2) - (dialogSaved.getBounds().width/2) , getFrmLernzielnator().getLocation().y + (getFrmLernzielnator().getHeight()/2) - (dialogSaved.getBounds().height/2) );
+							    dialogSaved.setVisible(true);
 					        }
 						}
 					}
@@ -345,7 +353,7 @@ public class mainWindow {
 			}		
 		};
 		KeyStroke strokeS = KeyStroke.getKeyStroke("S");
-		inputMap.put(strokeS,  "sPressed");
+		tree.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(strokeS,  "sPressed");
 		tree.getActionMap().put("sPressed", sPressedAction);
 		
 		//Shortcut Importieren
@@ -353,8 +361,8 @@ public class mainWindow {
 		Action iPressedAction = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fc = new JFileChooser();
-				if(aktFile != null && (!aktFile.isEmpty())){
-					fc = new JFileChooser(aktFile);
+				if(aktLernzielnator.getAktFile() != null && (!aktLernzielnator.getAktFile().isEmpty())){
+					fc = new JFileChooser(aktLernzielnator.getAktFile());
 				}
 				fc.setFileFilter(new customFileFilter());
 				
@@ -363,16 +371,29 @@ public class mainWindow {
 		        if (returnVal == JFileChooser.APPROVE_OPTION) {
 		            File file = fc.getSelectedFile();
 		            aktLernzielnator.readFile(file);
-		        }			
+		        }		
 			}		
 		};
 		KeyStroke strokeI = KeyStroke.getKeyStroke("I");
-		inputMap.put(strokeI,  "iPressed");
+		tree.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(strokeI,  "iPressed");
 		tree.getActionMap().put("iPressed", iPressedAction);
-				
+		
+		/*Action doNothing = new AbstractAction() {
+		    public void actionPerformed(ActionEvent e) {
+		        //do nothing
+		    }
+		};
+		tree.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke("1"), "doNothing");
+		tree.getActionMap().put("doNothing", doNothing);
+		tree.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("1"), "doNothing");
+		tree.getActionMap().put("doNothing", doNothing);
+		tree.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("1"), "doNothing");
+		tree.getActionMap().put("doNothing", doNothing);		 */
+		
 		//Shortcut Karteikarten
 		@SuppressWarnings("serial")
 		Action kPressedAction = new AbstractAction() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				CustomDefaultMutableTreeNode aktNode = (CustomDefaultMutableTreeNode)tree.getLastSelectedPathComponent();
 				try{
@@ -410,13 +431,14 @@ public class mainWindow {
 				}				
 			}		
 		};
-		KeyStroke strokeK = KeyStroke.getKeyStroke("K");
-		inputMap.put(strokeK,  "kPressed");
+		KeyStroke strokeK = KeyStroke.getKeyStroke("2");
+		tree.getInputMap(JComponent.WHEN_FOCUSED).put(strokeK,  "kPressed");
 		tree.getActionMap().put("kPressed", kPressedAction);
 		
 		//Shortcut Ausarbeitung
 		@SuppressWarnings("serial")
 		Action aPressedAction = new AbstractAction() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				CustomDefaultMutableTreeNode aktNode = (CustomDefaultMutableTreeNode)tree.getLastSelectedPathComponent();
 				try{
@@ -454,8 +476,8 @@ public class mainWindow {
 				}				
 			}			
 		};
-		KeyStroke strokeA = KeyStroke.getKeyStroke("A");
-		inputMap.put(strokeA,  "aPressed");
+		KeyStroke strokeA = KeyStroke.getKeyStroke("1");
+		tree.getInputMap(JComponent.WHEN_FOCUSED).put(strokeA,  "aPressed");
 		tree.getActionMap().put("aPressed", aPressedAction);
 		
 		//Shortcut Lerngruppe
@@ -505,8 +527,8 @@ public class mainWindow {
 				}				
 			}			
 		};
-		KeyStroke strokeL = KeyStroke.getKeyStroke("L");
-		inputMap.put(strokeL,  "lPressed");
+		KeyStroke strokeL = KeyStroke.getKeyStroke("3");
+		tree.getInputMap(JComponent.WHEN_FOCUSED).put(strokeL,  "lPressed");
 		tree.getActionMap().put("lPressed", lPressedAction);
 		
 		//Shortcut Relevant
@@ -550,7 +572,7 @@ public class mainWindow {
 			}			
 		};
 		KeyStroke strokeR = KeyStroke.getKeyStroke("R");
-		inputMap.put(strokeR,  "rPressed");
+		tree.getInputMap(JComponent.WHEN_FOCUSED).put(strokeR,  "rPressed");
 		tree.getActionMap().put("rPressed", rPressedAction);
 		
 		//configure popup-menu
@@ -607,7 +629,7 @@ public class mainWindow {
 			private void myPopupEvent(MouseEvent e) {
 				int x = e.getX();
 				int y = e.getY();
-				JTree tree = (JTree)e.getSource();
+				CustomJTree tree = (CustomJTree)e.getSource();
 				TreePath path = tree.getPathForLocation(x, y);
 				if (path == null)
 					return;	
@@ -760,38 +782,6 @@ public class mainWindow {
 		JLabel label_1 = new JLabel("");
 		panelBRLBottom.add(label_1);
 		
-		chckbxKarteikarten = new JCheckBox("Karteikarten");
-		chckbxKarteikarten.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try{
-					aktLernzielnator.getAktLernziel().setKarteikarten(chckbxKarteikarten.isSelected());
-					if(aktLernzielnator.getAktLernziel().isRelevant()){
-						if( (aktLernzielnator.getAktLernziel().isKarteikarten()) && (aktLernzielnator.getAktLernziel().isAusarbeitung()) ){
-							((CustomDefaultMutableTreeNode)tree.getLastSelectedPathComponent()).setColor(ok);
-						}
-						else
-						{
-							if( (aktLernzielnator.getAktLernziel().isKarteikarten()) ^ (aktLernzielnator.getAktLernziel().isAusarbeitung()) ){
-								((CustomDefaultMutableTreeNode)tree.getLastSelectedPathComponent()).setColor(mittel);
-							}
-							else
-							{
-								((CustomDefaultMutableTreeNode)tree.getLastSelectedPathComponent()).setColor(schlecht);
-							}
-						}
-					}
-					else
-					{
-						((CustomDefaultMutableTreeNode)tree.getLastSelectedPathComponent()).setColor(neutral);
-					}
-					((DefaultTreeModel)tree.getModel()).nodeChanged(((CustomDefaultMutableTreeNode)tree.getLastSelectedPathComponent()));
-				}catch(NumberFormatException e1){
-					
-				}
-			}
-		});
-		panelBRLBottom.add(chckbxKarteikarten);
-		
 		chckbxLerngruppe = new JCheckBox("Lerngruppe");
 		chckbxLerngruppe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -862,6 +852,38 @@ public class mainWindow {
 			}
 		});
 		panelBRLBottom.add(chckbxAusarbeitung);
+		
+		chckbxKarteikarten = new JCheckBox("Karteikarten");
+		chckbxKarteikarten.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try{
+					aktLernzielnator.getAktLernziel().setKarteikarten(chckbxKarteikarten.isSelected());
+					if(aktLernzielnator.getAktLernziel().isRelevant()){
+						if( (aktLernzielnator.getAktLernziel().isKarteikarten()) && (aktLernzielnator.getAktLernziel().isAusarbeitung()) ){
+							((CustomDefaultMutableTreeNode)tree.getLastSelectedPathComponent()).setColor(ok);
+						}
+						else
+						{
+							if( (aktLernzielnator.getAktLernziel().isKarteikarten()) ^ (aktLernzielnator.getAktLernziel().isAusarbeitung()) ){
+								((CustomDefaultMutableTreeNode)tree.getLastSelectedPathComponent()).setColor(mittel);
+							}
+							else
+							{
+								((CustomDefaultMutableTreeNode)tree.getLastSelectedPathComponent()).setColor(schlecht);
+							}
+						}
+					}
+					else
+					{
+						((CustomDefaultMutableTreeNode)tree.getLastSelectedPathComponent()).setColor(neutral);
+					}
+					((DefaultTreeModel)tree.getModel()).nodeChanged(((CustomDefaultMutableTreeNode)tree.getLastSelectedPathComponent()));
+				}catch(NumberFormatException e1){
+					
+				}
+			}
+		});
+		panelBRLBottom.add(chckbxKarteikarten);
 		panelBRLBottom.add(chckbxLerngruppe);
 		
 		JPanel panelBottomRightRight = new JPanel();
@@ -897,14 +919,16 @@ public class mainWindow {
 		JMenuItem mntmLaden = new JMenuItem("Laden");
 		mntmLaden.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				final JFileChooser fc = new JFileChooser();
-				//fc.addChoosableFileFilter(new customFileFilter());
+				JFileChooser fc = new JFileChooser();
+				if(aktLernzielnator.getAktFile() != null && (!aktLernzielnator.getAktFile().isEmpty())){
+					fc = new JFileChooser(aktLernzielnator.getAktFile());
+				}
 				fc.setFileFilter(new customFileFilter());
 				int returnVal = fc.showOpenDialog(getFrmLernzielnator());
 
 		        if (returnVal == JFileChooser.APPROVE_OPTION){
 		            File file = fc.getSelectedFile();
-		            aktFile = file.getAbsolutePath();
+		            aktLernzielnator.setAktFile(file.getAbsolutePath());
 		            try{
 		            	aktLernzielnator.setAktFile(file.getAbsolutePath());
 		            }
@@ -917,15 +941,14 @@ public class mainWindow {
 		});
 		mnData.add(mntmLaden);
 		
-		//TODO check aktFile / set akt file
 		JMenuItem mntmSpeichern = new JMenuItem("Speichern");
 		mntmSpeichern.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(aktLernzielnator.getSemesterListeSize() > 0){					
 					JFileChooser fc = new JFileChooser();
 					try{
-						if(aktFile != null && (!aktFile.isEmpty())){
-							fc = new JFileChooser(aktFile);
+						if(aktLernzielnator.getAktFile() != null && (!aktLernzielnator.getAktFile().isEmpty())){
+							fc = new JFileChooser(aktLernzielnator.getAktFile());
 						}
 					}
 					catch(NullPointerException e){
@@ -936,7 +959,7 @@ public class mainWindow {
 
 			        if (returnVal == JFileChooser.APPROVE_OPTION) {
 						File fileToBeSaved = fc.getSelectedFile();
-						aktFile = fileToBeSaved.getAbsolutePath();
+						aktLernzielnator.setAktFile(fileToBeSaved.getAbsolutePath());
 						
 						if(!fc.getSelectedFile().getAbsolutePath().endsWith(".csv")){
 						    fileToBeSaved = new File(fc.getSelectedFile() + ".csv");
@@ -1135,19 +1158,23 @@ public class mainWindow {
 		JMenuItem mntmImportieren = new JMenuItem("Importieren");
 		mntmImportieren.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				final JFileChooser fc = new JFileChooser();
-				//fc.addChoosableFileFilter(new customFileFilter());
+				JFileChooser fc = new JFileChooser();
+				if(aktLernzielnator.getAktFile() != null && (!aktLernzielnator.getAktFile().isEmpty())){
+					fc = new JFileChooser(aktLernzielnator.getAktFile());
+				}
 				fc.setFileFilter(new customFileFilter());
+				
 				int returnVal = fc.showOpenDialog(getFrmLernzielnator());
-
+	
 		        if (returnVal == JFileChooser.APPROVE_OPTION) {
 		            File file = fc.getSelectedFile();
 		            aktLernzielnator.readFile(file);
-		        }				
+		        }
+		        
 			}
 		});
 		mntmImportieren.setToolTipText("Fügt Inhalt einer Datei dem Datensatz hinzu");
-		mnData.add(mntmImportieren);
+		mnData.add(mntmImportieren);		
 		
 		JMenu mnEdit = new JMenu("Edit");
 		menuBar.add(mnEdit);
@@ -1481,7 +1508,7 @@ public class mainWindow {
 				JOptionPane pane = new JOptionPane(null);
 			    //configure
 				pane.setMessageType(JOptionPane.INFORMATION_MESSAGE );
-				pane.setMessage("Lernzielnator\nVersion 1.0\n\nAutor: Heiko Radde\ns61717@beuth-hochschule.de");
+				pane.setMessage("Lernzielnator\nVersion 1.01\n\nAutor: Heiko Radde\nTexte: Sonja Radde\n\nKontakt (Heiko Radde):\ns61717@beuth-hochschule.de");
 			    JDialog dialog = pane.createDialog("About");
 			    dialog.setLocation(getFrmLernzielnator().getLocation().x +  + (getFrmLernzielnator().getWidth()/2) - (dialog.getBounds().width/2) , getFrmLernzielnator().getLocation().y + (getFrmLernzielnator().getHeight()/2) - (dialog.getBounds().height/2) );
 			    dialog.setVisible(true);
@@ -1588,7 +1615,7 @@ public class mainWindow {
 	}
 	
 	
-	public JTree getTree(){
+	public CustomJTree getTree(){
 		return tree;
 	}
 	
@@ -1743,7 +1770,7 @@ public class mainWindow {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	private void treeExpandAll(JTree tree, TreePath parent) {
+	private void treeExpandAll(CustomJTree tree, TreePath parent) {
 	    TreeNode node = (TreeNode) parent.getLastPathComponent();
 	    if (node.getChildCount() >= 0) {
 	      for (Enumeration e = node.children(); e.hasMoreElements();) {
@@ -1756,7 +1783,7 @@ public class mainWindow {
 	  }
 	
 	@SuppressWarnings("rawtypes")
-	private void treeCollapsAll(JTree tree, TreePath parent) {
+	private void treeCollapsAll(CustomJTree tree, TreePath parent) {
 	    TreeNode node = (TreeNode) parent.getLastPathComponent();
 	    if (node.getChildCount() >= 0) {
 	      for (Enumeration e = node.children(); e.hasMoreElements();) {

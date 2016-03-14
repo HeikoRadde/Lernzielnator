@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -124,6 +125,7 @@ public class lernzielnator {
 		return foundData;
 	}
 	
+	//TODO: abs‰tze abfangen
 	private void readFileUni(File file){
 		String csvFile = new String( file.getAbsolutePath() );
 		BufferedReader br = null;
@@ -145,6 +147,8 @@ public class lernzielnator {
 				LZ_Dimension LzDimension;
 				LZ_Kognitionsdimension LzKognitionsdimension;
 				String[] inputs = new String[10];
+				String vTitle;
+				String description;
 				
 				inputs = line.split(cvsSplitBy,10);
 				modulNr = Integer.parseInt(inputs[0].replaceAll("[^\\d.]", ""));
@@ -156,45 +160,132 @@ public class lernzielnator {
 					ws = false;
 				}
 				year = Integer.parseInt(inputs[1].replaceAll("[^\\d.]", ""));
+				
 				week = Integer.parseInt(inputs[2].replaceAll("[^\\d.]", ""));
-				if( inputs[7].equals("x") ){
-					mc = true;
+				
+				vTitle = new String(inputs[3]);
+				
+				if(Array.getLength(inputs) < 5){	//then at least one newline-chartacter in title of veranstaltung & its the first one
+					do{
+						line = br.readLine();
+						inputs = line.split(cvsSplitBy,15);
+						String hand = new String(vTitle);
+						vTitle = new String(hand + "\n" + inputs[0]);
+					} while(Array.getLength(inputs) < 2);
+					
+					LzDimension = LZ_Dimension.parse(inputs[1]);
+					
+					LzKognitionsdimension = LZ_Kognitionsdimension.parse(inputs[2]);
+					
+					description = new String(inputs[3]);
+					
+					if(Array.getLength(inputs) < 5){	// also lernziel-description contains newline-characters
+						do{
+							line = br.readLine();
+							inputs = line.split(cvsSplitBy,15);
+							String hand = new String(description);
+							description = new String(hand + "\n" + inputs[0]);
+						} while(Array.getLength(inputs) < 2);
+						
+						if( inputs[1].equals("x") ){
+							mc = true;
+						}
+						
+						if( inputs[2].equals("x") ){
+							smpp = true;
+						}
+						
+						if( inputs[3].equals("x") ){
+							osce = true;
+						}
+					}
+					else{	//end if contains newline-character in description
+						if( inputs[4].equals("x") ){
+							mc = true;
+						}
+						
+						if( inputs[5].equals("x") ){
+							smpp = true;
+						}
+						
+						if( inputs[6].equals("x") ){
+							osce = true;
+						}
+					}
+				}	//end if contains newline-character in title
+				else{
+					if(Array.getLength(inputs) < 8){	//then at least one newline-chartacter in description of veranstaltung & its the first one
+						
+						LzDimension = LZ_Dimension.parse(inputs[4]);
+						
+						LzKognitionsdimension = LZ_Kognitionsdimension.parse(inputs[5]);
+						
+						description = new String(inputs[6]);
+						
+						do{
+							line = br.readLine();
+							inputs = line.split(cvsSplitBy,15);
+							String hand = new String(description);
+							description = new String(hand + "\n" + inputs[0]);
+						} while(inputs.length < 2);
+												
+						if( inputs[1].equals("x") ){
+							mc = true;
+						}
+						
+						if( inputs[2].equals("x") ){
+							smpp = true;
+						}
+						
+						if( inputs[3].equals("x") ){
+							osce = true;
+						}
+					}	//end if contains newline-character only in description
+					else{
+						//contains no newline-character
+						LzDimension = LZ_Dimension.parse(inputs[4]);
+						
+						LzKognitionsdimension = LZ_Kognitionsdimension.parse(inputs[5]);
+						
+						description = new String(inputs[6]);
+						
+						if( inputs[7].equals("x") ){
+							mc = true;
+						}
+						
+						if( inputs[8].equals("x") ){
+							smpp = true;
+						}
+						
+						if( inputs[9].equals("x") ){
+							osce = true;
+						}
+					}
 				}
 				
-				if( inputs[8].equals("x") ){
-					smpp = true;
-				}
-				
-				if( inputs[9].equals("x") ){
-					osce = true;
-				}
-				
-				if((!mc) && (!smpp)){
+				if((!mc) && (!smpp) && (!osce)){
 					relevant = false;
 				}
-								
-				LzDimension = LZ_Dimension.parse(inputs[4]);
-				LzKognitionsdimension = LZ_Kognitionsdimension.parse(inputs[5]);
 				
 				int semesterId = searchSemester(ws, year);
 				if(semesterId >= 0){
 					int modulId = semesterListe.get(semesterId).searchModul(modulNr);
 					if(modulId >= 0){
-						int veranstaltungId = semesterListe.get(semesterId).getSemesterModul(modulId).searchVeranstaltung(week, inputs[3]);
+						int veranstaltungId = semesterListe.get(semesterId).getSemesterModul(modulId).searchVeranstaltung(week, vTitle);
 						if(veranstaltungId >= 0){
-							if( !(semesterListe.get(semesterId).getSemesterModul(modulId).getModulVeranstaltung(veranstaltungId).countainsLernziel(inputs[6])) ){
+							if( !(semesterListe.get(semesterId).getSemesterModul(modulId).getModulVeranstaltung(veranstaltungId).countainsLernziel(description)) ){
 								//nur Lernziel ist neu
-								lernziel newLz = new lernziel(inputs[6], mc, smpp, osce, LzDimension, LzKognitionsdimension);
+								lernziel newLz = new lernziel(description, mc, smpp, osce, LzDimension, LzKognitionsdimension);
 								newLz.setRelevant(relevant);
 								semesterListe.get(semesterId).getSemesterModul(modulId).getModulVeranstaltung(veranstaltungId).addVeranstaltungLernziel(newLz);
 							}
 						}
 						else{
 							//alles einschlieﬂlich Veranstaltung ist neu
-							veranstaltung newVs = new veranstaltung(week, inputs[3]);
+							veranstaltung newVs = new veranstaltung(week, vTitle);
 							semesterListe.get(semesterId).getSemesterModul(modulId).addModulVerantaltung(newVs);
 							veranstaltungId = semesterListe.get(semesterId).getSemesterModul(modulId).veranstaltungen.indexOf(newVs);
-							lernziel newLz = new lernziel(inputs[6], mc, smpp, osce, LzDimension, LzKognitionsdimension);
+							lernziel newLz = new lernziel(description, mc, smpp, osce, LzDimension, LzKognitionsdimension);
 							newLz.setRelevant(relevant);
 							semesterListe.get(semesterId).getSemesterModul(modulId).getModulVeranstaltung(veranstaltungId).addVeranstaltungLernziel(newLz);
 						}
@@ -205,9 +296,9 @@ public class lernzielnator {
 						modulId = semesterListe.get(semesterId).module.size();
 						semesterListe.get(semesterId).addSemesterModul(newModul);
 						modulNr = semesterListe.get(semesterId).module.indexOf(newModul);
-						veranstaltung newVs = new veranstaltung(week, inputs[3]);
+						veranstaltung newVs = new veranstaltung(week, vTitle);
 						semesterListe.get(semesterId).getSemesterModul(modulId).addModulVerantaltung(newVs);
-						lernziel newLz = new lernziel(inputs[6], mc, smpp, osce, LzDimension, LzKognitionsdimension);
+						lernziel newLz = new lernziel(description, mc, smpp, osce, LzDimension, LzKognitionsdimension);
 						newLz.setRelevant(relevant);
 						semesterListe.get(semesterId).getSemesterModul(modulId).getModulVeranstaltung(0).addVeranstaltungLernziel(newLz);
 					}
@@ -219,9 +310,9 @@ public class lernzielnator {
 					semesterId = semesterListe.indexOf(newSem);
 					modul newModul = new modul(modulNr);
 					semesterListe.get(semesterId).addSemesterModul(newModul);
-					veranstaltung newVs = new veranstaltung(week, inputs[3]);
+					veranstaltung newVs = new veranstaltung(week, vTitle);
 					semesterListe.get(semesterId).getSemesterModul(0).addModulVerantaltung(newVs);
-					lernziel newLz = new lernziel(inputs[6], mc, smpp, osce, LzDimension, LzKognitionsdimension);
+					lernziel newLz = new lernziel(description, mc, smpp, osce, LzDimension, LzKognitionsdimension);
 					newLz.setRelevant(relevant);
 					semesterListe.get(semesterId).getSemesterModul(0).getModulVeranstaltung(0).addVeranstaltungLernziel(newLz);
 				}
@@ -266,6 +357,9 @@ public class lernzielnator {
 				boolean lerngruppe  = new Boolean (false);
 				boolean relevant = new Boolean(true);
 				String[] inputs = new String[15];
+				String description;
+				String notes;
+				String vTitle;
 				
 				inputs = line.split(cvsSplitBy,15);
 				modulNr = Integer.parseInt(inputs[0].replaceAll("[^\\d.]", ""));
@@ -277,57 +371,328 @@ public class lernzielnator {
 					ws = false;
 				}
 				year = Integer.parseInt(inputs[1].replaceAll("[^\\d.]", ""));
-				week = Integer.parseInt(inputs[2].replaceAll("[^\\d.]", ""));
-				if( inputs[7].equals("x") ){
-					mc = true;
+				week = Integer.parseInt(inputs[2].replaceAll("[^\\d.]", ""));		
+				vTitle = new String(inputs[3]);
+				if(Array.getLength(inputs) < 5){	//then at least one newline-chartacter in title of veranstaltung & its the first one
+					do{
+						line = br.readLine();
+						inputs = line.split(cvsSplitBy,15);
+						String hand = new String(vTitle);
+						vTitle = new String(hand + "\n" + inputs[0]);
+					} while(Array.getLength(inputs) < 2);
+					
+					LzDimension = LZ_Dimension.parse(inputs[1]);
+					
+					LzKognitionsdimension = LZ_Kognitionsdimension.parse(inputs[2]);
+					
+					description = new String(inputs[3]);
+					
+					if(Array.getLength(inputs) < 5){	// also lernziel-description contains newline-characters
+						do{
+							line = br.readLine();
+							inputs = line.split(cvsSplitBy,15);
+							String hand = new String(description);
+							description = new String(hand + "\n" + inputs[0]);
+						} while(Array.getLength(inputs) < 2);
+						
+						if( inputs[1].equals("x") ){
+							mc = true;
+						}
+						
+						if( inputs[2].equals("x") ){
+							smpp = true;
+						}
+						
+						if( inputs[3].equals("x") ){
+							osce = true;
+						}
+						
+						notes = new String(inputs[4]);
+						
+						if(Array.getLength(inputs) < 6){	//also notes contains newline-characters
+							do{
+								line = br.readLine();
+								inputs = line.split(cvsSplitBy,15);
+								String hand = new String(notes);
+								notes = new String(hand + "\n" + inputs[0]);
+							} while(Array.getLength(inputs) < 2);
+							
+							if( inputs[1].equals("x") ){
+								karteikarten = true;
+							}
+							
+							if( inputs[2].equals("x") ){
+								ausarbeitung = true;
+							}
+							
+							if( inputs[3].equals("x") ){
+								lerngruppe = true;
+							}
+							
+							if( inputs[4].equals("x") ){
+								relevant = true;
+							}
+						}//end if notes contains newline-characters
+						else{//if no newline-character in notes, but ones in title and description
+							if( inputs[5].equals("x") ){
+								karteikarten = true;
+							}
+							
+							if( inputs[6].equals("x") ){
+								ausarbeitung = true;
+							}
+							
+							if( inputs[7].equals("x") ){
+								lerngruppe = true;
+							}
+							
+							if( inputs[8].equals("x") ){
+								relevant = true;
+							}
+						}
+						
+					}//end if lernziel-description contains newline-characters
+					else{
+						//only title of veranstaltung with newline-character
+						if( inputs[4].equals("x") ){
+							mc = true;
+						}
+						
+						if( inputs[5].equals("x") ){
+							smpp = true;
+						}
+						
+						if( inputs[6].equals("x") ){
+							osce = true;
+						}
+						
+						notes = new String(inputs[7]);
+						
+
+						if(Array.getLength(inputs) < 9){	//the  also newline-character in notes
+							do{
+								line = br.readLine();
+								inputs = line.split(cvsSplitBy,15);
+								String hand = new String(notes);
+								notes = new String(hand + "\n" + inputs[0]);
+							} while(Array.getLength(inputs) < 2);
+							
+							if( inputs[1].equals("x") ){
+								karteikarten = true;
+							}
+							
+							if( inputs[2].equals("x") ){
+								ausarbeitung = true;
+							}
+							
+							if( inputs[3].equals("x") ){
+								lerngruppe = true;
+							}
+							
+							if( inputs[4].equals("x") ){
+								relevant = true;
+							}							
+						}//end if title and notes contain newline-character
+						else{	//only title contains newline-character
+							if( inputs[8].equals("x") ){
+								karteikarten = true;
+							}
+							
+							if( inputs[9].equals("x") ){
+								ausarbeitung = true;
+							}
+							
+							if( inputs[10].equals("x") ){
+								lerngruppe = true;
+							}
+							
+							if( inputs[11].equals("x") ){
+								relevant = true;
+							}
+						}						
+					}					
+				}//end if title of veranstaltung contains newline-charactetr
+				else{
+					if(Array.getLength(inputs) < 8){	//then at least one newline-chartacter in description of veranstaltung & its the first one
+						
+						LzDimension = LZ_Dimension.parse(inputs[4]);
+						
+						LzKognitionsdimension = LZ_Kognitionsdimension.parse(inputs[5]);
+						
+						description = new String(inputs[6]);
+						
+						do{
+							line = br.readLine();
+							inputs = line.split(cvsSplitBy,15);
+							String hand = new String(description);
+							description = new String(hand + "\n" + inputs[0]);
+						} while(inputs.length < 2);
+												
+						if( inputs[1].equals("x") ){
+							mc = true;
+						}
+						
+						if( inputs[2].equals("x") ){
+							smpp = true;
+						}
+						
+						if( inputs[3].equals("x") ){
+							osce = true;
+						}
+						
+						notes = new String(inputs[4]);
+						
+						if(Array.getLength(inputs) < 6){	//then at least one newline-character in notes
+							do{
+								line = br.readLine();
+								inputs = line.split(cvsSplitBy,15);
+								String hand = new String(notes);
+								notes = new String(hand + "\n" + inputs[0]);
+							} while(inputs.length < 2);
+							
+							if( inputs[1].equals("x") ){
+								karteikarten = true;
+							}
+							
+							if( inputs[2].equals("x") ){
+								ausarbeitung = true;
+							}
+							
+							if( inputs[3].equals("x") ){
+								lerngruppe = true;
+							}
+							
+							if( inputs[4].equals("x") ){
+								relevant = true;
+							}
+						}
+						else{
+							if( inputs[5].equals("x") ){
+								karteikarten = true;
+							}
+							
+							if( inputs[6].equals("x") ){
+								ausarbeitung = true;
+							}
+							
+							if( inputs[7].equals("x") ){
+								lerngruppe = true;
+							}
+							
+							if( inputs[8].equals("x") ){
+								relevant = true;
+							}						
+						}
+					}
+					else{						
+						if(Array.getLength(inputs) < 12){	//then at least one newline-chartacter in notes & its the first one
+							LzDimension = LZ_Dimension.parse(inputs[4]);
+							
+							LzKognitionsdimension = LZ_Kognitionsdimension.parse(inputs[5]);					
+
+							description = new String(inputs[6]);
+							
+							if( inputs[7].equals("x") ){
+								mc = true;
+							}
+							
+							if( inputs[8].equals("x") ){
+								smpp = true;
+							}
+							
+							if( inputs[9].equals("x") ){
+								osce = true;
+							}
+							
+							notes = new String(inputs[10]);
+							
+							do{
+								line = br.readLine();
+								inputs = line.split(cvsSplitBy,15);
+								String hand = new String(notes);
+								notes = new String(hand + "\n" + inputs[0]);
+							} while(inputs.length < 2);
+							
+							if( inputs[1].equals("x") ){
+								karteikarten = true;
+							}
+							
+							if( inputs[2].equals("x") ){
+								ausarbeitung = true;
+							}
+							
+							if( inputs[3].equals("x") ){
+								lerngruppe = true;
+							}
+							
+							if( inputs[4].equals("x") ){
+								relevant = true;
+							}
+						}
+						else{
+							//no newline-character
+							
+							LzDimension = LZ_Dimension.parse(inputs[4]);
+							
+							LzKognitionsdimension = LZ_Kognitionsdimension.parse(inputs[5]);					
+
+							description = new String(inputs[6]);
+							
+							if( inputs[7].equals("x") ){
+								mc = true;
+							}
+							
+							if( inputs[8].equals("x") ){
+								smpp = true;
+							}
+							
+							if( inputs[9].equals("x") ){
+								osce = true;
+							}
+							
+							notes = new String(inputs[10]);
+							
+							if( inputs[11].equals("x") ){
+								karteikarten = true;
+							}
+							
+							if( inputs[12].equals("x") ){
+								ausarbeitung = true;
+							}
+							
+							if( inputs[13].equals("x") ){
+								lerngruppe = true;
+							}
+							
+							if( inputs[14].equals("x") ){
+								relevant = true;
+							}
+						}						
+					}	
 				}
 				
-				if( inputs[8].equals("x") ){
-					smpp = true;
-				}
 				
-				if( inputs[9].equals("x") ){
-					osce = true;
-				}
 				
-				if( inputs[11].equals("x") ){
-					karteikarten = true;
-				}
-				
-				if( inputs[12].equals("x") ){
-					ausarbeitung = true;
-				}
-				
-				if( inputs[13].equals("x") ){
-					lerngruppe = true;
-				}
-				
-				if( inputs[14].equals("x") ){
-					relevant = true;
-				}
-								
-				LzDimension = LZ_Dimension.parse(inputs[4]);
-				LzKognitionsdimension = LZ_Kognitionsdimension.parse(inputs[5]);
 				
 				int semesterId = searchSemester(ws, year);
 				if(semesterId >= 0){
 					int modulId = semesterListe.get(semesterId).searchModul(modulNr);
 					if(modulId >= 0){
-						int veranstaltungId = semesterListe.get(semesterId).getSemesterModul(modulId).searchVeranstaltung(week, inputs[3]);
+						int veranstaltungId = semesterListe.get(semesterId).getSemesterModul(modulId).searchVeranstaltung(week, vTitle);
 						if(veranstaltungId >= 0){
 							if( !(semesterListe.get(semesterId).getSemesterModul(modulId).getModulVeranstaltung(veranstaltungId).countainsLernziel(inputs[6])) ){
 								//nur Lernziel ist neu
-								lernziel newLz = new lernziel(inputs[6], inputs[10], mc, smpp, osce, LzDimension, karteikarten, ausarbeitung, lerngruppe, LzKognitionsdimension, relevant);
+								lernziel newLz = new lernziel(description, notes, mc, smpp, osce, LzDimension, karteikarten, ausarbeitung, lerngruppe, LzKognitionsdimension, relevant);
 								newLz.setRelevant(relevant);
 								semesterListe.get(semesterId).getSemesterModul(modulId).getModulVeranstaltung(veranstaltungId).addVeranstaltungLernziel(newLz);
 							}
 						}
 						else{
 							//alles einschlieﬂlich Veranstaltung ist neu
-							veranstaltung newVs = new veranstaltung(week, inputs[3]);
+							veranstaltung newVs = new veranstaltung(week, vTitle);
 							semesterListe.get(semesterId).getSemesterModul(modulId).addModulVerantaltung(newVs);
 							veranstaltungId = semesterListe.get(semesterId).getSemesterModul(modulId).veranstaltungen.indexOf(newVs);
-							lernziel newLz = new lernziel(inputs[6], inputs[10], mc, smpp, osce, LzDimension, karteikarten, ausarbeitung, lerngruppe, LzKognitionsdimension, relevant);
+							lernziel newLz = new lernziel(description, notes, mc, smpp, osce, LzDimension, karteikarten, ausarbeitung, lerngruppe, LzKognitionsdimension, relevant);
 							newLz.setRelevant(relevant);
 							semesterListe.get(semesterId).getSemesterModul(modulId).getModulVeranstaltung(veranstaltungId).addVeranstaltungLernziel(newLz);
 						}
@@ -338,9 +703,9 @@ public class lernzielnator {
 						modulId = semesterListe.get(semesterId).module.size();
 						semesterListe.get(semesterId).addSemesterModul(newModul);
 						modulNr = semesterListe.get(semesterId).module.indexOf(newModul);
-						veranstaltung newVs = new veranstaltung(week, inputs[3]);
+						veranstaltung newVs = new veranstaltung(week, vTitle);
 						semesterListe.get(semesterId).getSemesterModul(modulId).addModulVerantaltung(newVs);
-						lernziel newLz = new lernziel(inputs[6], inputs[10], mc, smpp, osce, LzDimension, karteikarten, ausarbeitung, lerngruppe, LzKognitionsdimension, relevant);
+						lernziel newLz = new lernziel(description, notes, mc, smpp, osce, LzDimension, karteikarten, ausarbeitung, lerngruppe, LzKognitionsdimension, relevant);
 						newLz.setRelevant(relevant);
 						semesterListe.get(semesterId).getSemesterModul(modulId).getModulVeranstaltung(0).addVeranstaltungLernziel(newLz);
 					}
@@ -352,9 +717,9 @@ public class lernzielnator {
 					semesterId = semesterListe.indexOf(newSem);
 					modul newModul = new modul(modulNr);
 					semesterListe.get(semesterId).addSemesterModul(newModul);
-					veranstaltung newVs = new veranstaltung(week, inputs[3]);
+					veranstaltung newVs = new veranstaltung(week, vTitle);
 					semesterListe.get(semesterId).getSemesterModul(0).addModulVerantaltung(newVs);
-					lernziel newLz = new lernziel(inputs[6], inputs[10], mc, smpp, osce, LzDimension, karteikarten, ausarbeitung, lerngruppe, LzKognitionsdimension, relevant);
+					lernziel newLz = new lernziel(description, notes, mc, smpp, osce, LzDimension, karteikarten, ausarbeitung, lerngruppe, LzKognitionsdimension, relevant);
 					newLz.setRelevant(relevant);
 					semesterListe.get(semesterId).getSemesterModul(0).getModulVeranstaltung(0).addVeranstaltungLernziel(newLz);
 				}
@@ -1267,9 +1632,9 @@ public class lernzielnator {
 			line2 = br.readLine();
 			br.close();
 			file.delete();
-			if( Float.parseFloat(line1.replaceAll("[^\\d.]", "")) != 1.0 ){	//TODO: ACHTUNG: Versionsnummer immer aktualisieren!!!!!
+			if( Float.parseFloat(line1.replaceAll("[^\\d.]", "")) != 1.01 ){	//TODO: ACHTUNG: Versionsnummer immer aktualisieren!!!!! Auch unten im Text und im About (mainWindow.java)
 				//Display Error Message
-				JTextArea textarea = new JTextArea("Sie nutzen gerade die Version 1.0.\nDie aktuelle Version ist " + Float.toString((Float.parseFloat(line1.replaceAll("[^\\d.]", "")))) + "\n" + line2);			    
+				JTextArea textarea = new JTextArea("Sie nutzen gerade die Version 1.01.\nDie aktuelle Version ist " + Float.toString((Float.parseFloat(line1.replaceAll("[^\\d.]", "")))) + "\n" + line2);			    
 				textarea.setEditable(false);
 				JOptionPane pane = new JOptionPane(textarea);
 				pane.setMessageType(JOptionPane.ERROR_MESSAGE );				
@@ -1280,9 +1645,7 @@ public class lernzielnator {
 		}
 		catch(Exception e)
 		{
-			 javax.swing.JOptionPane.showConfirmDialog((java.awt.Component)
-			         null,e.getMessage(), "Error",
-			         javax.swing.JOptionPane.DEFAULT_OPTION);
+			
 		}		
 	}
 	

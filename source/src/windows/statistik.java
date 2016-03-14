@@ -73,8 +73,9 @@ public class statistik extends JDialog {
 				+Integer.toString(gruen) + " vollständig bearbeitet (grün)\n  " 
 				+ Integer.toString(gelb) + " teilweise bearbeitet (gelb)\n  "
 				+ Integer.toString(rot) + " nicht bearbeitet (rot)\n  "
-				+ Integer.toString(grau) + " nicht relevant (grau)\n  "
-				+ ", in " + Integer.toString(veranstaltungen) + " Veranstaltungen in\n  " + Integer.toString(module) + " Modulen in " + Integer.toString(semester) + " Semestern.\n"
+				+ Integer.toString(grau) + " nicht relevant (grau),\n  "
+				+ " in " + Integer.toString(veranstaltungen) + " Veranstaltungen in\n  " + Integer.toString(module) + " Modulen in " + Integer.toString(semester) + " Semestern.\n"
+				+ "\n"
 				+ "Von den Lernzielen sind:\n  " 
 				+ Integer.toString(MC) + " MC,\n  "
 				+ Integer.toString(SMPP) + " SMPP,\n  "
@@ -82,7 +83,7 @@ public class statistik extends JDialog {
 				+ Integer.toString(karteikarten) + " mit Kartiekarten,\n  "
 				+ Integer.toString(ausarbeitung) + " mit Ausarbeitung,\n  "
 				+ Integer.toString(lerngruppen) + " mit Lerngruppen,\n  "
-				+ Integer.toString(notes) + " mit Notiz\n  und "
+				+ Integer.toString(notes) + " mit Notizen\n  und "
 				+ Integer.toString(relevant) + " relevant");
 		
 		
