@@ -1632,7 +1632,7 @@ public class lernzielnator {
 			line2 = br.readLine();
 			br.close();
 			file.delete();
-			if( Float.parseFloat(line1.replaceAll("[^\\d.]", "")) != 1.01 ){	//TODO: ACHTUNG: Versionsnummer immer aktualisieren!!!!! Auch unten im Text und im About (mainWindow.java)
+			if( Double.parseDouble(line1.replaceAll("[^\\d.]", "")) != 1.01 ){	//TODO: ACHTUNG: Versionsnummer immer aktualisieren!!!!! Auch unten im Text und im About (mainWindow.java)
 				//Display Error Message
 				JTextArea textarea = new JTextArea("Sie nutzen gerade die Version 1.01.\nDie aktuelle Version ist " + Float.toString((Float.parseFloat(line1.replaceAll("[^\\d.]", "")))) + "\n" + line2);			    
 				textarea.setEditable(false);
