@@ -12,7 +12,6 @@ import javax.swing.border.EmptyBorder;
 import data.lernzielnator;
 import data.semester;
 
-import java.awt.GridLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -22,7 +21,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class addSemester extends JDialog {
-
+	private static final long serialVersionUID = 186876190516048563L;
 	private final JPanel contentPanel = new JPanel();
 	private JTextField txtYear;
 	private final ButtonGroup buttonGroupSemester = new ButtonGroup();
@@ -48,7 +47,7 @@ public class addSemester extends JDialog {
 		setAlwaysOnTop(true);
 		setTitle("neues Semester");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 171, 163);
+		setBounds(100, 100, 163, 163);
 		
 		//pack();
 		setLocationRelativeTo(frame);		
@@ -59,24 +58,24 @@ public class addSemester extends JDialog {
 		contentPanel.setLayout(null);
 		{
 			JLabel lblJahr = new JLabel("Jahr");
-			lblJahr.setBounds(10, 14, 46, 14);
+			lblJahr.setBounds(10, 14, 34, 14);
 			contentPanel.add(lblJahr);
 		}
 		{
 			txtYear = new JTextField();
-			txtYear.setBounds(44, 11, 86, 20);
+			txtYear.setBounds(42, 11, 95, 20);
 			contentPanel.add(txtYear);
 			txtYear.setColumns(10);
 		}
 		
 		JRadioButton rdbtnSommersemester = new JRadioButton("Sommersemester");
 		buttonGroupSemester.add(rdbtnSommersemester);
-		rdbtnSommersemester.setBounds(10, 35, 109, 23);
+		rdbtnSommersemester.setBounds(10, 35, 139, 23);
 		contentPanel.add(rdbtnSommersemester);
 		
 		JRadioButton rdbtnWintersemester = new JRadioButton("Wintersemester");
 		buttonGroupSemester.add(rdbtnWintersemester);
-		rdbtnWintersemester.setBounds(10, 61, 109, 23);
+		rdbtnWintersemester.setBounds(10, 61, 139, 23);
 		contentPanel.add(rdbtnWintersemester);
 		{
 			JPanel buttonPane = new JPanel();
@@ -105,6 +104,8 @@ public class addSemester extends JDialog {
 									pane.setMessage("Bitte auswählen, ob Sommer- oder Wintersemester!");
 								    JDialog dialogError = pane.createDialog("Error");
 								    dialogError.setLocation(contentPanel.getLocation().x  + (contentPanel.getWidth()/2)  , contentPanel.getLocation().y + (contentPanel.getHeight()/2)   );
+								    dialogError.setLocationRelativeTo(addSemester.this);
+								    dialogError.setAlwaysOnTop(true);
 								    dialogError.setVisible(true);
 								    return;
 								}
@@ -118,7 +119,9 @@ public class addSemester extends JDialog {
 							pane.setMessageType(JOptionPane.ERROR_MESSAGE );
 							pane.setMessage("Bitte Ziffern in das Textfeld eingeben!");
 						    JDialog dialogError = pane.createDialog("Error");
-						    dialogError.setLocation(contentPanel.getLocation().x  + (contentPanel.getWidth()/2)  , contentPanel.getLocation().y + (contentPanel.getHeight()/2)   );
+						    //dialogError.setLocation(contentPanel.getLocation().x  + (contentPanel.getWidth()/2)  , contentPanel.getLocation().y + (contentPanel.getHeight()/2)   );
+						    dialogError.setLocationRelativeTo(addSemester.this);
+						    dialogError.setAlwaysOnTop(true);
 						    dialogError.setVisible(true);
 						}
 						

@@ -12,7 +12,6 @@ import javax.swing.border.EmptyBorder;
 
 import data.veranstaltung;
 
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -20,7 +19,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class editVeranstaltung extends JDialog {
-
+	private static final long serialVersionUID = -1981884975181426254L;
 	private final JPanel contentPanel = new JPanel();
 	private JTextArea txtTitle;
 	private JTextField txtWeek;
@@ -125,7 +124,9 @@ public class editVeranstaltung extends JDialog {
 								break;
 							}
 						    JDialog dialogError = pane.createDialog("Error");
-						    dialogError.setLocation(contentPanel.getLocation().x  + (contentPanel.getWidth()/2)  , contentPanel.getLocation().y + (contentPanel.getHeight()/2)   );
+						    dialogError.setLocationRelativeTo(editVeranstaltung.this);
+						    dialogError.setAlwaysOnTop(true);
+						    //dialogError.setLocation(contentPanel.getLocation().x  + (contentPanel.getWidth()/2)  , contentPanel.getLocation().y + (contentPanel.getHeight()/2)   );
 						    dialogError.setVisible(true);
 						    error = -1;
 						}

@@ -6,19 +6,17 @@
 package com.gg.piechart;
  
 import java.awt.Color;
-import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.geom.Arc2D;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
  
 import javax.swing.JPanel;
  
 public class PieChart extends JPanel {
  
+	private static final long serialVersionUID = 3747689381753298251L;
+
 	enum Type {
 		STANDARD, SIMPLE_INDICATOR, GRADED_INDICATOR
 	}
@@ -39,7 +37,7 @@ public class PieChart extends JPanel {
 		this.percent = percent;
 	}
  
-	public PieChart(ArrayList values, ArrayList colors) {
+	public PieChart(ArrayList<Double> values, ArrayList<Color> colors) {
  
 		type = Type.STANDARD;
  
@@ -47,7 +45,7 @@ public class PieChart extends JPanel {
 		this.colors = colors;
 	}
  
-	public PieChart(int percent, ArrayList gradingValues, ArrayList gradingColors) {
+	public PieChart(int percent, ArrayList<Double> gradingValues, ArrayList<Color> gradingColors) {
 		type = Type.GRADED_INDICATOR;
  
 		this.gradingValues = gradingValues;

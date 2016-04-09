@@ -1,14 +1,14 @@
 package util;
-import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.DefaultMutableTreeNode;
 
 public class MyTreeCellRenderer extends DefaultTreeCellRenderer {
 
-    @Override
+	private static final long serialVersionUID = -1357647823552475720L;
+
+	@Override
     public Component getTreeCellRendererComponent(JTree tree, Object value,
             boolean sel, boolean exp, boolean leaf, int row, boolean hasFocus) {
         super.getTreeCellRendererComponent(tree, value, sel, exp, leaf, row, hasFocus);
@@ -30,9 +30,8 @@ public class MyTreeCellRenderer extends DefaultTreeCellRenderer {
         		setForeground(((CustomDefaultMutableTreeNode) value).getColor());
         	}
             String tooltip = "";
-            this.setToolTipText(tooltip);        	
-        }
-        
+            this.setToolTipText(tooltip);
+        }        
 
         return this;
     }

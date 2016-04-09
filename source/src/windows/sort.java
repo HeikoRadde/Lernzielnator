@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 
 public class sort extends JDialog {
 
+	private static final long serialVersionUID = 2024446469014189303L;
 	private final JPanel contentPanel = new JPanel();
 
 	/**

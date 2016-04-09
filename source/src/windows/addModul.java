@@ -14,16 +14,15 @@ import data.modul;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class addModul extends JDialog {
-
+	private static final long serialVersionUID = 8678448174443709186L;
 	private final JPanel contentPanel = new JPanel();
 	private JTextField txtModulNr;
-	private JComboBox cmBxSemester;
+	private JComboBox<String> cmBxSemester;
 
 	/**
 	 * Launch the application.
@@ -53,8 +52,8 @@ public class addModul extends JDialog {
 		
 		setLocationRelativeTo(frame);
 		
-		cmBxSemester = new JComboBox();
-		cmBxSemester.setBounds(10, 11, 80, 20);
+		cmBxSemester = new JComboBox<String>();
+		cmBxSemester.setBounds(10, 11, 87, 20);
 		contentPanel.add(cmBxSemester);
 		
 		for (int i = 0; i < lernzielnator.getSemesterListeSize(); i++){
@@ -69,11 +68,11 @@ public class addModul extends JDialog {
 		}
 		
 		JLabel lblModulnummer = new JLabel("Modulnummer:");
-		lblModulnummer.setBounds(10, 42, 80, 14);
+		lblModulnummer.setBounds(10, 42, 87, 14);
 		contentPanel.add(lblModulnummer);
 		
 		txtModulNr = new JTextField();
-		txtModulNr.setBounds(89, 39, 86, 20);
+		txtModulNr.setBounds(107, 39, 122, 20);
 		contentPanel.add(txtModulNr);
 		txtModulNr.setColumns(10);
 		{
@@ -108,7 +107,9 @@ public class addModul extends JDialog {
 							pane.setMessageType(JOptionPane.ERROR_MESSAGE );
 							pane.setMessage("Bitte Ziffern in das Textfeld eingeben!");
 						    JDialog dialogError = pane.createDialog("Error");
-						    dialogError.setLocation(contentPanel.getLocation().x  + (contentPanel.getWidth()/2)  , contentPanel.getLocation().y + (contentPanel.getHeight()/2)   );
+						    //dialogError.setLocation(contentPanel.getLocation().x  + (contentPanel.getWidth()/2)  , contentPanel.getLocation().y + (contentPanel.getHeight()/2)   );
+						    dialogError.setLocationRelativeTo(contentPanel);
+						    dialogError.setAlwaysOnTop(true);
 						    dialogError.setVisible(true);
 						}
 					}
@@ -147,11 +148,11 @@ public class addModul extends JDialog {
 		setLocationRelativeTo(frame);
 		
 		JLabel lblModulnummer = new JLabel("Modulnummer:");
-		lblModulnummer.setBounds(10, 14, 80, 14);
+		lblModulnummer.setBounds(10, 14, 87, 14);
 		contentPanel.add(lblModulnummer);
 		
 		txtModulNr = new JTextField();
-		txtModulNr.setBounds(89, 11, 86, 20);
+		txtModulNr.setBounds(107, 11, 122, 20);
 		txtModulNr.setText("");
 		contentPanel.add(txtModulNr);
 		txtModulNr.setColumns(10);
@@ -176,7 +177,9 @@ public class addModul extends JDialog {
 							pane.setMessageType(JOptionPane.ERROR_MESSAGE );
 							pane.setMessage("Bitte Ziffern in das Textfeld eingeben!");
 						    JDialog dialogError = pane.createDialog("Error");
-						    dialogError.setLocation(contentPanel.getLocation().x  + (contentPanel.getWidth()/2)  , contentPanel.getLocation().y + (contentPanel.getHeight()/2)   );
+						    //dialogError.setLocation(contentPanel.getLocation().x  + (contentPanel.getWidth()/2)  , contentPanel.getLocation().y + (contentPanel.getHeight()/2)   );
+						    dialogError.setLocationRelativeTo(contentPanel);
+						    dialogError.setAlwaysOnTop(true);
 						    dialogError.setVisible(true);
 						}
 					}

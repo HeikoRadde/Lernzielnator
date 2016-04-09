@@ -1,5 +1,4 @@
 package data;
-import java.awt.Color;
 import java.awt.EventQueue;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -26,11 +25,6 @@ import windows.mainWindow;
 public class lernzielnator {
 	private ArrayList<semester> semesterListe = new ArrayList<semester>();
 	private lernziel aktLernziel;
-	
-	private Color ok = Color.GREEN;
-	private Color mittel = Color.ORANGE;
-	private Color schlecht = Color.RED;
-	private Color neutral = Color.GRAY;
 	
 	private String aktFile;
 	private static mainWindow window;
@@ -1632,9 +1626,9 @@ public class lernzielnator {
 			line2 = br.readLine();
 			br.close();
 			file.delete();
-			if( Double.parseDouble(line1.replaceAll("[^\\d.]", "")) != 1.01 ){	//TODO: ACHTUNG: Versionsnummer immer aktualisieren!!!!! Auch unten im Text und im About (mainWindow.java)
+			if( Double.parseDouble(line1.replaceAll("[^\\d.]", "")) != 1.02 ){	//TODO: ACHTUNG: Versionsnummer immer aktualisieren!!!!! Auch unten im Text und im About (mainWindow.java)
 				//Display Error Message
-				JTextArea textarea = new JTextArea("Sie nutzen gerade die Version 1.01.\nDie aktuelle Version ist " + Float.toString((Float.parseFloat(line1.replaceAll("[^\\d.]", "")))) + "\n" + line2);			    
+				JTextArea textarea = new JTextArea("Sie nutzen gerade die Version 1.02.\nDie aktuelle Version ist " + Float.toString((Float.parseFloat(line1.replaceAll("[^\\d.]", "")))) + "\n" + line2);			    
 				textarea.setEditable(false);
 				JOptionPane pane = new JOptionPane(textarea);
 				pane.setMessageType(JOptionPane.ERROR_MESSAGE );				

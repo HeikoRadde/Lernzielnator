@@ -12,14 +12,13 @@ import data.modul;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class editModul extends JDialog {
 
+	private static final long serialVersionUID = -8844371396098776125L;
 	private final JPanel contentPanel = new JPanel();
 	private JTextField txtModulNr;
 
@@ -80,7 +79,9 @@ public class editModul extends JDialog {
 							pane.setMessageType(JOptionPane.ERROR_MESSAGE );
 							pane.setMessage("Bitte Ziffern in das Textfeld eingeben!");
 						    JDialog dialogError = pane.createDialog("Error");
-						    dialogError.setLocation(contentPanel.getLocation().x  + (contentPanel.getWidth()/2)  , contentPanel.getLocation().y + (contentPanel.getHeight()/2)   );
+						    dialogError.setLocationRelativeTo(editModul.this);
+						    dialogError.setAlwaysOnTop(true);
+						    //dialogError.setLocation(contentPanel.getLocation().x  + (contentPanel.getWidth()/2)  , contentPanel.getLocation().y + (contentPanel.getHeight()/2)   );
 						    dialogError.setVisible(true);
 						}
 					}

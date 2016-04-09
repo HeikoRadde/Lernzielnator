@@ -14,12 +14,7 @@ import data.lernziel;
 import util.LZ_Dimension;
 import util.LZ_Kognitionsdimension;
 
-import javax.swing.JTextField;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import java.awt.GridLayout;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -29,6 +24,7 @@ import java.awt.event.ActionEvent;
 
 public class editLernziel extends JDialog {
 
+	private static final long serialVersionUID = 2449325805539170363L;
 	private final JPanel contentPanel = new JPanel();
 	private JTextArea txtNotes;
 	private JTextArea txtDescription;
@@ -38,12 +34,12 @@ public class editLernziel extends JDialog {
 	private JCheckBox chckbxLerngruppe;
 	private JCheckBox chckbxAusarbeitung;
 	private JCheckBox chckbxKarteikarten;
-	private JComboBox cmBxLzDimension;
-	private JComboBox cmBxLzKognitionsdimension;
+	private JComboBox<Object> cmBxLzDimension;
+	private JComboBox<Object> cmBxLzKognitionsdimension;
 	private JCheckBox chckbxNotRelevant;
 
-	private boolean descriptionClicked = false;
-	private boolean notesClicked = false;
+	
+	
 
 	/**
 	 * Launch the application.
@@ -137,8 +133,8 @@ public class editLernziel extends JDialog {
 		panelBottom.add(panelBottomRight);
 		panelBottomRight.setLayout(null);
 		
-		cmBxLzDimension = new JComboBox();
-		cmBxLzDimension.setModel(new DefaultComboBoxModel(new String[] {"*none*", "Wissen/Kenntnisse(kognitiv)", "Fertigkeiten(psychomotorisch)", "Einstellungen(emotional/reflektiv)", "Mini-PA"}));
+		cmBxLzDimension = new JComboBox<Object>();
+		cmBxLzDimension.setModel(new DefaultComboBoxModel<Object>(new String[] {"*none*", "Wissen/Kenntnisse(kognitiv)", "Fertigkeiten(psychomotorisch)", "Einstellungen(emotional/reflektiv)", "Mini-PA"}));
 		switch(lernziel.getLzDimension()){
 		case none:
 			cmBxLzDimension.setSelectedIndex(0);
@@ -159,8 +155,8 @@ public class editLernziel extends JDialog {
 		cmBxLzDimension.setBounds(0, 0, 259, 20);
 		panelBottomRight.add(cmBxLzDimension);
 		
-		cmBxLzKognitionsdimension = new JComboBox();
-		cmBxLzKognitionsdimension.setModel(new DefaultComboBoxModel(new String[] {"*none*", "erinnern", "verstehen", "analysieren", "evaluieren", "erzeugen"}));
+		cmBxLzKognitionsdimension = new JComboBox<Object>();
+		cmBxLzKognitionsdimension.setModel(new DefaultComboBoxModel<Object>(new String[] {"*none*", "erinnern", "verstehen", "analysieren", "evaluieren", "erzeugen"}));
 		switch(lernziel.getLzKognitionsdimension()){
 		case none:
 			cmBxLzKognitionsdimension.setSelectedIndex(0);
@@ -229,7 +225,9 @@ public class editLernziel extends JDialog {
 								break;
 							}
 						    JDialog dialogError = pane.createDialog("Error");
-						    dialogError.setLocation(contentPanel.getLocation().x  + (contentPanel.getWidth()/2)  , contentPanel.getLocation().y + (contentPanel.getHeight()/2)   );
+						    dialogError.setLocationRelativeTo(editLernziel.this);
+						    dialogError.setAlwaysOnTop(true);
+						    //dialogError.setLocation(contentPanel.getLocation().x  + (contentPanel.getWidth()/2)  , contentPanel.getLocation().y + (contentPanel.getHeight()/2)   );
 						    dialogError.setVisible(true);
 						    error = -1;
 						}

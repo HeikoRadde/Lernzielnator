@@ -11,7 +11,6 @@ import javax.swing.border.EmptyBorder;
 
 import data.semester;
 
-import java.awt.GridLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -21,7 +20,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class editSemester extends JDialog {
-
+	private static final long serialVersionUID = -6014179277394387213L;
 	private final JPanel contentPanel = new JPanel();
 	private JTextField txtYear;
 	private final ButtonGroup buttonGroupSemester = new ButtonGroup();
@@ -123,7 +122,9 @@ public class editSemester extends JDialog {
 							pane.setMessageType(JOptionPane.ERROR_MESSAGE );
 							pane.setMessage("Bitte Ziffern in das Textfeld eingeben!");
 						    JDialog dialogError = pane.createDialog("Error");
-						    dialogError.setLocation(contentPanel.getLocation().x  + (contentPanel.getWidth()/2)  , contentPanel.getLocation().y + (contentPanel.getHeight()/2)   );
+						    dialogError.setLocationRelativeTo(editSemester.this);
+						    dialogError.setAlwaysOnTop(true);
+						    //dialogError.setLocation(contentPanel.getLocation().x  + (contentPanel.getWidth()/2)  , contentPanel.getLocation().y + (contentPanel.getHeight()/2)   );
 						    dialogError.setVisible(true);
 						}
 						

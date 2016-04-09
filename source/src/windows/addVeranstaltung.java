@@ -21,10 +21,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class addVeranstaltung extends JDialog {
-
+	private static final long serialVersionUID = 1960209422077358402L;
 	private final JPanel contentPanel = new JPanel();
-	private JComboBox cmBxSemester;
-	private JComboBox cmBxModul;
+	private JComboBox<String> cmBxSemester;
+	private JComboBox<String> cmBxModul;
 	private JTextArea txtTitle;
 	private JTextField txtWeek;
 
@@ -48,7 +48,7 @@ public class addVeranstaltung extends JDialog {
 		setModal(true);
 		setAlwaysOnTop(true);
 		setTitle("neue Veranstaltung");
-		setBounds(100, 100, 218, 167);
+		setBounds(100, 100, 230, 210);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -56,12 +56,12 @@ public class addVeranstaltung extends JDialog {
 		
 		setLocationRelativeTo(frame);
 		
-		cmBxModul = new JComboBox();
+		cmBxModul = new JComboBox<String>();
 		cmBxModul.setEnabled(false);
-		cmBxModul.setBounds(107, 11, 87, 20);
+		cmBxModul.setBounds(114, 11, 90, 20);
 		contentPanel.add(cmBxModul);
 		
-		cmBxSemester = new JComboBox();
+		cmBxSemester = new JComboBox<String>();
 		cmBxSemester.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				cmBxModul.setEnabled(true);
@@ -75,7 +75,7 @@ public class addVeranstaltung extends JDialog {
 				
 			}
 		});
-		cmBxSemester.setBounds(10, 11, 87, 20);
+		cmBxSemester.setBounds(10, 11, 90, 20);
 		contentPanel.add(cmBxSemester);
 		
 		for (int i = 0; i < lernzielnator.getSemesterListeSize(); i++){
@@ -90,23 +90,24 @@ public class addVeranstaltung extends JDialog {
 		}
 				
 		JLabel lblNewLabel = new JLabel("Titel");
-		lblNewLabel.setBounds(10, 42, 46, 14);
+		lblNewLabel.setBounds(10, 14, 46, 14);
 		contentPanel.add(lblNewLabel);
-		
-		txtTitle = new JTextArea();
-		txtTitle.setText(veranstaltung.getVeranstaltungTitel());
-		JScrollPane scrollTitle = new JScrollPane (txtTitle);
-		scrollTitle.setLocation(38, 8);
-		scrollTitle.setSize(186, 62);
+		JScrollPane scrollTitle = new JScrollPane ();
+		scrollTitle.setLocation(10, 42);
+		scrollTitle.setSize(194, 62);
 		scrollTitle.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		contentPanel.add(scrollTitle);
 		
+		txtTitle = new JTextArea();
+		scrollTitle.setViewportView(txtTitle);
+		txtTitle.setText(veranstaltung.getVeranstaltungTitel());
+		
 		JLabel lblNewLabel_1 = new JLabel("Woche");
-		lblNewLabel_1.setBounds(10, 67, 46, 14);
+		lblNewLabel_1.setBounds(10, 115, 46, 14);
 		contentPanel.add(lblNewLabel_1);
 		
 		txtWeek = new JTextField();
-		txtWeek.setBounds(52, 64, 86, 20);
+		txtWeek.setBounds(66, 112, 138, 20);
 		contentPanel.add(txtWeek);
 		txtWeek.setColumns(10);
 		{
@@ -171,7 +172,9 @@ public class addVeranstaltung extends JDialog {
 								break;
 							}
 						    JDialog dialogError = pane.createDialog("Error");
-						    dialogError.setLocation(contentPanel.getLocation().x  + (contentPanel.getWidth()/2)  , contentPanel.getLocation().y + (contentPanel.getHeight()/2)   );
+						    //dialogError.setLocation(contentPanel.getLocation().x  + (contentPanel.getWidth()/2)  , contentPanel.getLocation().y + (contentPanel.getHeight()/2)   );
+						    dialogError.setLocationRelativeTo(addVeranstaltung.this);
+						    dialogError.setAlwaysOnTop(true);
 						    dialogError.setVisible(true);
 						    error = -1;
 						}
@@ -193,7 +196,7 @@ public class addVeranstaltung extends JDialog {
 			}
 		}
 	}
-	
+
 	
 	/**
 	 * @wbp.parser.constructor
@@ -229,7 +232,7 @@ public class addVeranstaltung extends JDialog {
 		contentPanel.add(lblNewLabel_1);
 		
 		txtWeek = new JTextField();
-		txtWeek.setBounds(52, 78, 172, 20);
+		txtWeek.setBounds(66, 78, 158, 20);
 		contentPanel.add(txtWeek);
 		txtWeek.setColumns(10);
 		{
@@ -278,7 +281,9 @@ public class addVeranstaltung extends JDialog {
 								break;
 							}
 						    JDialog dialogError = pane.createDialog("Error");
-						    dialogError.setLocation(contentPanel.getLocation().x  + (contentPanel.getWidth()/2)  , contentPanel.getLocation().y + (contentPanel.getHeight()/2)   );
+						    //dialogError.setLocation(contentPanel.getLocation().x  + (contentPanel.getWidth()/2)  , contentPanel.getLocation().y + (contentPanel.getHeight()/2)   );
+						    dialogError.setLocationRelativeTo(addVeranstaltung.this);
+						    dialogError.setAlwaysOnTop(true);
 						    dialogError.setVisible(true);
 						    error = -1;
 						}

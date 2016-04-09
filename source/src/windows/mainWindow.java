@@ -2,107 +2,57 @@ package windows;
 import javax.swing.JOptionPane;
 
 import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.EventQueue;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.DocumentEvent;
 
 import javax.swing.JFrame;
-import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 
-import java.awt.GridBagLayout;
-import net.miginfocom.swing.MigLayout;
 import util.CustomDefaultMutableTreeNode;
 import util.CustomJTree;
-import util.LZ_Dimension;
-import util.LZ_Kognitionsdimension;
 import util.MyTreeCellRenderer;
 
-import javax.net.ssl.HttpsURLConnection;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.ActionMap;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.InputMap;
-import javax.swing.SpringLayout;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.JRootPane;
-
 import java.awt.GridLayout;
-import javax.swing.JTree;
+import java.awt.Insets;
+
 import javax.swing.KeyStroke;
 import javax.swing.JLabel;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.awt.Point;
-
-import javax.swing.JTextField;
-import javax.swing.JToolTip;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
 
 import data.lernziel;
 import data.lernzielnator;
 import data.modul;
 import data.semester;
 import data.veranstaltung;
-import util.CustomDefaultMutableTreeNode;
-import util.LZ_Dimension;
-import util.LZ_Kognitionsdimension;
-import util.MyTreeCellRenderer;
-import util.Utils;
 import util.customFileFilter;
 
-import java.awt.FlowLayout;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.awt.event.ActionEvent;
-import javax.swing.SwingConstants;
-import javax.swing.ToolTipManager;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.JScrollPane;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.event.TreeSelectionEvent;
-import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 public class mainWindow {
 	
@@ -145,7 +95,6 @@ public class mainWindow {
 	private JCheckBoxMenuItem chckbxmntmGraueLernziele;
 	private JCheckBoxMenuItem chckbxmntmLernzieleMitLerngruppen;
 	private JCheckBoxMenuItem chckbxmntmLeereNodes;
-	private JCheckBoxMenuItem chckbxmntmLzbeschrBeiMouseover;
 
 	/**
 	 * Launch the application.
@@ -294,7 +243,8 @@ public class mainWindow {
 		+ "[1] --> \"Ausarbeitung\" aktivieren/deaktivieren\n"
 		+ "[2] --> \"Karteikarten\" aktivieren/deaktivieren\n"
 		+ "[3] --> \"Lerngruppe\" aktivieren/deaktivieren\n"
-		+ "[R] --> \"Relevant\" aktivieren/deaktivieren");
+		+ "[R] --> \"Relevant\" aktivieren/deaktivieren"
+		+ "[T] --> \"Statistik"\ anzeigen);
 		*/		
 		//Shortcut Speichern
 		@SuppressWarnings("serial")
@@ -432,7 +382,7 @@ public class mainWindow {
 			}		
 		};
 		KeyStroke strokeK = KeyStroke.getKeyStroke("2");
-		tree.getInputMap(JComponent.WHEN_FOCUSED).put(strokeK,  "kPressed");
+		tree.getInputMap(JComponent.WHEN_FOCUSED).put(strokeK, "kPressed");
 		tree.getActionMap().put("kPressed", kPressedAction);
 		
 		//Shortcut Ausarbeitung
@@ -477,7 +427,7 @@ public class mainWindow {
 			}			
 		};
 		KeyStroke strokeA = KeyStroke.getKeyStroke("1");
-		tree.getInputMap(JComponent.WHEN_FOCUSED).put(strokeA,  "aPressed");
+		tree.getInputMap(JComponent.WHEN_FOCUSED).put(strokeA, "aPressed");
 		tree.getActionMap().put("aPressed", aPressedAction);
 		
 		//Shortcut Lerngruppe
@@ -528,7 +478,7 @@ public class mainWindow {
 			}			
 		};
 		KeyStroke strokeL = KeyStroke.getKeyStroke("3");
-		tree.getInputMap(JComponent.WHEN_FOCUSED).put(strokeL,  "lPressed");
+		tree.getInputMap(JComponent.WHEN_FOCUSED).put(strokeL, "lPressed");
 		tree.getActionMap().put("lPressed", lPressedAction);
 		
 		//Shortcut Relevant
@@ -572,8 +522,67 @@ public class mainWindow {
 			}			
 		};
 		KeyStroke strokeR = KeyStroke.getKeyStroke("R");
-		tree.getInputMap(JComponent.WHEN_FOCUSED).put(strokeR,  "rPressed");
+		tree.getInputMap(JComponent.WHEN_FOCUSED).put(strokeR, "rPressed");
 		tree.getActionMap().put("rPressed", rPressedAction);
+		
+		//Shortcut Statistik
+		@SuppressWarnings("serial")
+		Action tPressedAction = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				openStatistik();
+			}		
+		};
+		KeyStroke strokeT = KeyStroke.getKeyStroke("T");
+		tree.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(strokeT, "tPressed");
+		tree.getActionMap().put("tPressed", tPressedAction);
+		
+		//Shortcut Up
+		@SuppressWarnings("serial")
+		Action uPressedAction = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				aktLernzielnator.up();
+			}		
+		};
+		KeyStroke strokeU = KeyStroke.getKeyStroke("U");
+		tree.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(strokeU, "uPressed");
+		tree.getActionMap().put("uPressed", uPressedAction);
+		
+		//Shortcut Down
+		@SuppressWarnings("serial")
+		Action jPressedAction = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				aktLernzielnator.down();
+			}		
+		};
+		KeyStroke strokeJ = KeyStroke.getKeyStroke("J");
+		tree.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(strokeJ, "jPressed");
+		tree.getActionMap().put("jPressed", jPressedAction);
+		
+		//Shortcut delete
+		@SuppressWarnings("serial")
+		Action delPressedAction = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				if(!tree.isSelectionEmpty()){
+					deleteNode();
+				}
+			}		
+		};
+		KeyStroke strokeDel = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
+		tree.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(strokeDel, "delPressed");
+		tree.getActionMap().put("delPressed", delPressedAction);
+		
+		//Shortcut delete with backspace
+		@SuppressWarnings("serial")
+		Action del2PressedAction = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				if(!tree.isSelectionEmpty()){
+					deleteNode();
+				}
+			}		
+		};
+		KeyStroke strokeDel2 = KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0);
+		tree.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(strokeDel2, "delPressed");
+		tree.getActionMap().put("del2Pressed", del2PressedAction);
 		
 		//configure popup-menu
 		JMenuItem popUpNew = new JMenuItem("Neu");
@@ -660,6 +669,7 @@ public class mainWindow {
 		panelRightTop.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		textField_Description = new JTextArea();
+		textField_Description.setMargin(new Insets(10,5,10,5));
 		textField_Description.setEditable(false);
 		textField_Description.setLineWrap(true);
 		textField_Description.setWrapStyleWord(true);
@@ -673,6 +683,7 @@ public class mainWindow {
 		panelRightMiddle.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		textField_Notes = new JTextArea();
+		textField_Notes.setMargin(new Insets(10,5,10,5));
 		textField_Notes.setLineWrap(true);
 		textField_Notes.setWrapStyleWord(true);
 		textField_Notes.getDocument().addDocumentListener(new DocumentListener(){
@@ -891,6 +902,7 @@ public class mainWindow {
 		panelBottomRightRight.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		textField_LzDimension = new JTextArea();
+		textField_LzDimension.setMargin(new Insets(10,5,10,5));
 		textField_LzDimension.setEditable(false);
 		textField_LzDimension.setLineWrap(true);
 		textField_LzDimension.setWrapStyleWord(true);
@@ -901,6 +913,7 @@ public class mainWindow {
 		panelBottomRightRight.add(scrollLzDim);
 		
 		textField_LzKognitionsdimension = new JTextArea();
+		textField_LzKognitionsdimension.setMargin(new Insets(10,5,10,5));
 		textField_LzKognitionsdimension.setEditable(false);
 		textField_LzKognitionsdimension.setLineWrap(true);
 		textField_LzKognitionsdimension.setWrapStyleWord(true);
@@ -1518,87 +1531,7 @@ public class mainWindow {
 		JMenuItem mntmStatistik = new JMenuItem("Statistik");
 		mntmStatistik.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				int semester = 0;
-				int module = 0;
-				int veranstaltungen = 0;
-				int lernziele = 0;
-				int rot = 0;
-				int gelb = 0;
-				int gruen = 0;
-				int grau = 0;
-				int MC = 0;
-				int SMPP = 0;
-				int OSCE = 0;
-				int karteikarten = 0;
-				int ausarbeitung = 0;
-				int lerngruppen = 0;
-				int notes = 0;
-				int relevant = 0;
-				semester sem;
-				modul mod;
-				veranstaltung ver;
-				lernziel ler;
-				
-				for(int i = 0; i < aktLernzielnator.getSemesterListeSize(); i ++){
-					semester++;
-					sem = aktLernzielnator.getSemester(i);
-					for(int j = 0; j < aktLernzielnator.getModulListeSize(i); j++){
-						module++;
-						mod = sem.getSemesterModul(j);
-						for(int k = 0; k < aktLernzielnator.getVeranstaltungsListeSize(i, j); k++){
-							veranstaltungen++;
-							ver = mod.getModulVeranstaltung(k);
-							for(int l = 0; l < aktLernzielnator.getLernzielListeSize(i, j, k); l++){
-								lernziele++;
-								ler = ver.getVeranstaltungLz(l);
-								if(ler.isMC()){
-									MC++;
-								}
-								if(ler.isSMPP()){
-									SMPP++;
-								}
-								if(ler.isOSCE()){
-									OSCE++;
-								}
-								if(ler.isKarteikarten()){
-									karteikarten++;
-								}
-								if(ler.isAusarbeitung()){
-									ausarbeitung++;
-								}
-								if(ler.isLerngruppe()){
-									lerngruppen++;
-								}
-								if(!(ler.getLzNotes().isEmpty())){
-									notes++;
-								}
-								if(ler.isRelevant()){
-									relevant++;
-									if( (ler.isKarteikarten()) && (ler.isAusarbeitung()) ){
-										gruen++;
-									}
-									else
-									{
-										if( (ler.isKarteikarten()) ^ (ler.isAusarbeitung()) ){
-											gelb++;
-										}
-										else
-										{
-											rot++;
-										}
-									}
-								}
-								else
-								{
-									grau++;
-								}
-							}
-						}
-					}
-				}
-				//JFrame frame, final mainWindow mainWindow,int semester, int module, int veranstaltungen, int lernziele, int rot, int gelb, int gruen, int grau, int MC, int SMPP, int OSCE, int karteikarten, int ausarbeitung, int lerngruppen, int notes, int relevant, Color ok, Color mittel, Color schlecht, Color neutral
-				statistik statistikDialog = new statistik(getFrmLernzielnator(), mainWindow.this, semester, module, veranstaltungen, lernziele, rot, gelb, gruen, grau, MC, SMPP, OSCE, karteikarten, ausarbeitung, lerngruppen, notes, relevant, ok, mittel, schlecht, neutral );
-				statistikDialog.setVisible(true);
+				openStatistik();
 			}
 		});
 		
@@ -1811,21 +1744,21 @@ public class mainWindow {
 		aktLernzielnator.setAktLernziel(lernziel);
 	}
 	
-	//TODO: make this better
+	@SuppressWarnings("unused")
 	private void updateInfos(semester aktSemester, int modulNr, int veranstNr, int lzNr){
-		textField_Description.setText(aktSemester.getSemesterModul(modulNr).getModulVeranstaltung(veranstNr).getVeranstaltungLz(lzNr).getLzDescription());
-		textField_Notes.setText(aktSemester.getSemesterModul(modulNr).getModulVeranstaltung(veranstNr).getVeranstaltungLz(lzNr).getLzNotes());
-		textField_LzDimension.setText(aktSemester.getSemesterModul(modulNr).getModulVeranstaltung(veranstNr).getVeranstaltungLz(lzNr).getLzDimension().toString());
-		textField_LzKognitionsdimension.setText(aktSemester.getSemesterModul(modulNr).getModulVeranstaltung(veranstNr).getVeranstaltungLz(lzNr).getLzKognitionsdimension().toString());
-		chckbxMc.setSelected(aktSemester.getSemesterModul(modulNr).getModulVeranstaltung(veranstNr).getVeranstaltungLz(lzNr).isMC());
-		chckbxSmpp.setSelected(aktSemester.getSemesterModul(modulNr).getModulVeranstaltung(veranstNr).getVeranstaltungLz(lzNr).isOSCE());
-		chckbxOsce.setSelected(aktSemester.getSemesterModul(modulNr).getModulVeranstaltung(veranstNr).getVeranstaltungLz(lzNr).isSMPP());
-		chckbxRelevant.setSelected(aktSemester.getSemesterModul(modulNr).getModulVeranstaltung(veranstNr).getVeranstaltungLz(lzNr).isRelevant());
-		chckbxLerngruppe.setSelected(aktSemester.getSemesterModul(modulNr).getModulVeranstaltung(veranstNr).getVeranstaltungLz(lzNr).isLerngruppe());
-		chckbxKarteikarten.setSelected(aktSemester.getSemesterModul(modulNr).getModulVeranstaltung(veranstNr).getVeranstaltungLz(lzNr).isKarteikarten());
-		chckbxAusarbeitung.setSelected(aktSemester.getSemesterModul(modulNr).getModulVeranstaltung(veranstNr).getVeranstaltungLz(lzNr).isAusarbeitung());
-		
 		aktLernzielnator.setAktLernziel(aktSemester.getSemesterModul(modulNr).getModulVeranstaltung(veranstNr).getVeranstaltungLz(lzNr));
+		
+		textField_Description.setText(aktLernzielnator.getAktLernziel().getLzDescription());
+		textField_Notes.setText(aktLernzielnator.getAktLernziel().getLzNotes());
+		textField_LzDimension.setText(aktLernzielnator.getAktLernziel().getLzDimension().toString());
+		textField_LzKognitionsdimension.setText(aktLernzielnator.getAktLernziel().getLzKognitionsdimension().toString());
+		chckbxMc.setSelected(aktLernzielnator.getAktLernziel().isMC());
+		chckbxSmpp.setSelected(aktLernzielnator.getAktLernziel().isOSCE());
+		chckbxOsce.setSelected(aktLernzielnator.getAktLernziel().isSMPP());
+		chckbxRelevant.setSelected(aktLernzielnator.getAktLernziel().isRelevant());
+		chckbxLerngruppe.setSelected(aktLernzielnator.getAktLernziel().isLerngruppe());
+		chckbxKarteikarten.setSelected(aktLernzielnator.getAktLernziel().isKarteikarten());
+		chckbxAusarbeitung.setSelected(aktLernzielnator.getAktLernziel().isAusarbeitung());
 	}
 	
 	private void clearInfos(){
@@ -1960,20 +1893,17 @@ public class mainWindow {
 				for(i = aktLernzielnator.getSemesterListeSize()-1; i >= 0; i--){
 					aktLernzielnator.removeSemester(i);
 				}
-				updateTree();
 			}
 			else{
 				if(node.getPath().length == 2){
 					//semester
 					aktLernzielnator.removeSemester(node.getParent().getIndex(node));
 					node.removeFromParent();
-					//updateTree();
 				}
 				else{
 					if(node.getPath().length == 3){
 						int sem = node.getParent().getParent().getIndex(node.getParent());
 						aktLernzielnator.getSemester(sem).removeSemesterModule(node.getModul());
-						updateTree();
 					}
 					else{
 						if(node.getPath().length == 4){
@@ -1981,23 +1911,21 @@ public class mainWindow {
 							int mod = node.getParent().getParent().getIndex(node.getParent());
 							int sem = node.getParent().getParent().getParent().getIndex(node.getParent().getParent());
 							aktLernzielnator.getModul(sem, mod).removeModulVeranstaltung(node.getVeranstaltung());
-							updateTree();
 						}
 						else{
 							if(node.getPath().length == 5){
 								//Lernziel
-								int lz = node.getParent().getIndex(node);
 								int ver = node.getParent().getParent().getIndex(node.getParent());
 								int mod = node.getParent().getParent().getParent().getIndex(node.getParent().getParent());
 								int sem = node.getParent().getParent().getParent().getParent().getIndex(node.getParent().getParent().getParent());
-								aktLernzielnator.getLernziel(sem, mod, ver, lz);
-								clearInfos();
-								updateTree();
+								aktLernzielnator.getVeranstaltung(sem, mod, ver).removeVeranstaltungLernziel(node.getLernziel());
 							}
 						}
 					}
 				}
 			}
+			clearInfos();
+			updateTree();
 		}
 		else{
 			//Display Error Message
@@ -2146,7 +2074,89 @@ public class mainWindow {
 	public CustomDefaultMutableTreeNode getLastSelectedPathComponent(){
 		return ((CustomDefaultMutableTreeNode)tree.getLastSelectedPathComponent());
 	}
-
 	
+	private void openStatistik(){
+		int semester = 0;
+		int module = 0;
+		int veranstaltungen = 0;
+		int lernziele = 0;
+		int rot = 0;
+		int gelb = 0;
+		int gruen = 0;
+		int grau = 0;
+		int MC = 0;
+		int SMPP = 0;
+		int OSCE = 0;
+		int karteikarten = 0;
+		int ausarbeitung = 0;
+		int lerngruppen = 0;
+		int notes = 0;
+		int relevant = 0;
+		semester sem;
+		modul mod;
+		veranstaltung ver;
+		lernziel ler;
+		
+		for(int i = 0; i < aktLernzielnator.getSemesterListeSize(); i ++){
+			semester++;
+			sem = aktLernzielnator.getSemester(i);
+			for(int j = 0; j < aktLernzielnator.getModulListeSize(i); j++){
+				module++;
+				mod = sem.getSemesterModul(j);
+				for(int k = 0; k < aktLernzielnator.getVeranstaltungsListeSize(i, j); k++){
+					veranstaltungen++;
+					ver = mod.getModulVeranstaltung(k);
+					for(int l = 0; l < aktLernzielnator.getLernzielListeSize(i, j, k); l++){
+						lernziele++;
+						ler = ver.getVeranstaltungLz(l);
+						if(ler.isMC()){
+							MC++;
+						}
+						if(ler.isSMPP()){
+							SMPP++;
+						}
+						if(ler.isOSCE()){
+							OSCE++;
+						}
+						if(ler.isKarteikarten()){
+							karteikarten++;
+						}
+						if(ler.isAusarbeitung()){
+							ausarbeitung++;
+						}
+						if(ler.isLerngruppe()){
+							lerngruppen++;
+						}
+						if(!(ler.getLzNotes().isEmpty())){
+							notes++;
+						}
+						if(ler.isRelevant()){
+							relevant++;
+							if( (ler.isKarteikarten()) && (ler.isAusarbeitung()) ){
+								gruen++;
+							}
+							else
+							{
+								if( (ler.isKarteikarten()) ^ (ler.isAusarbeitung()) ){
+									gelb++;
+								}
+								else
+								{
+									rot++;
+								}
+							}
+						}
+						else
+						{
+							grau++;
+						}
+					}
+				}
+			}
+		}
+		//JFrame frame, final mainWindow mainWindow,int semester, int module, int veranstaltungen, int lernziele, int rot, int gelb, int gruen, int grau, int MC, int SMPP, int OSCE, int karteikarten, int ausarbeitung, int lerngruppen, int notes, int relevant, Color ok, Color mittel, Color schlecht, Color neutral
+		statistik statistikDialog = new statistik(getFrmLernzielnator(), mainWindow.this, semester, module, veranstaltungen, lernziele, rot, gelb, gruen, grau, MC, SMPP, OSCE, karteikarten, ausarbeitung, lerngruppen, notes, relevant, ok, mittel, schlecht, neutral );
+		statistikDialog.setVisible(true);
+	}
 	
 }

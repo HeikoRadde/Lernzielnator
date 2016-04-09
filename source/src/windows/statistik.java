@@ -12,13 +12,7 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
 import com.gg.piechart.PieChart;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import java.awt.GridLayout;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
@@ -28,6 +22,7 @@ import javax.swing.JTextArea;
 
 public class statistik extends JDialog {
 
+	private static final long serialVersionUID = -2926036103319280452L;
 	private final JPanel contentPanel = new JPanel();
 
 	/**
@@ -104,6 +99,7 @@ public class statistik extends JDialog {
 	    scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 	    textPanel.add(scroll);
 	          
+	    //TODO: fix white stripe (due to inaccuracy)
 		JPanel piePanel = new JPanel();
 		ArrayList<Double> values = new ArrayList<Double>();		
 		values.add(new Double(((double)gruen*100)/(double)lernziele));

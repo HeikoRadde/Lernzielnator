@@ -9,6 +9,8 @@ import data.veranstaltung;
 import java.awt.Color;
 
 public class CustomDefaultMutableTreeNode extends DefaultMutableTreeNode {
+
+	private static final long serialVersionUID = 8927303080835231863L;
 	private Color color;
 	boolean isSemester = false;
 	boolean isModul = false;
