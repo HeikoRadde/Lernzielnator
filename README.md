@@ -1,6 +1,5 @@
 # Lernzielnator
 
-\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*
 ##Willkommen zum Lernzielnator-Readme! Hier eine kurze Anleitung.##
 1.	Lade Lernzielnator.jar herunter.
 2.	Habe die aktuelle Version von Java installiert. Du kannst diese [hier herunter laden](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html). 
@@ -18,6 +17,7 @@ Viel Spaß!
 
 *Achtung:*
 Es dürfen keinesfalls Absätze Texte gelangen! D.h. keine Absätze in den Notizen, keine Absätze in den Beschreibungen und keine Absätze in den Titeln!
+
 \*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*
 
 Design & Coding von Heiko Radde
