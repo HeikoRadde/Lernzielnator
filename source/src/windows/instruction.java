@@ -116,4 +116,7 @@ public class instruction extends JFrame {
 		splitPane.setLeftComponent(list);
 	}
 
+	
+	
+	
 }
