@@ -45,7 +45,7 @@ public class instruction extends JFrame {
 	private String txtMisc = new String("Der kleine weiße Streigen im Pie-Chart:\n"
 			+ "Da das Programm nicht rundet sondern immer einige Ziffern hinter dem Komma abschneidet, kommt man bei der Addition aller Zahlen in seinem schönen Tortendiagramm nie auf die vollen 100%.\n"
 			+ "\n"
-			+ "Heiko hat für seine ~5400 Zeilen Code zwei Tafeln Schokolade bekommen.");
+			+ "Heiko hat für seine ~5600 Zeilen Code zwei Tafeln Schokolade bekommen.");
 		//TODO: Update Lines of code ^
 	/**
 	 * Launch the application.

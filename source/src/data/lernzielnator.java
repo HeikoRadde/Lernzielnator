@@ -30,8 +30,6 @@ public class lernzielnator {
 	private static mainWindow window;
 	private static lernzielnator aktLernzielnator;
 	
-	
-	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -67,7 +65,6 @@ public class lernzielnator {
 		aktFile = newFile;
 	}
 	
-	
 	public boolean readFile(File file){		
 		String csvFile = new String( file.getAbsolutePath() );
 		BufferedReader br = null;
@@ -80,13 +77,21 @@ public class lernzielnator {
 			while ((line = br.readLine()) != null) {
 				String[] inputs = line.split(cvsSplitBy);
 				if(inputs[0].equals("Modul")){
-					if(inputs.length == 10){	//Datei von Uni
-						readFileUni(file);
-						foundData = true;
+					if(inputs.length == 7){			//Datei von Uni ohne MC, SMPP, OSCE
+						
+						readFileUni7(file);
+					    
+					    foundData = true;
 					}
-					else if(inputs.length == 15){	//Datei von Programm
-						readFileOwn(file);
-						foundData = true;
+					else{
+						if(inputs.length == 10){	//Datei von Uni mit MC, SMPP, OSCE
+							readFileUni10(file);
+							foundData = true;
+						}
+						else if(inputs.length == 15){	//Datei von Programm
+							readFileOwn(file);
+							foundData = true;
+						}
 					}
 					break;
 				}
@@ -120,7 +125,191 @@ public class lernzielnator {
 	}
 	
 	//TODO: abs‰tze abfangen
-	private void readFileUni(File file){
+	private void readFileUni7(File file){
+		String csvFile = new String( file.getAbsolutePath() );
+		BufferedReader br = null;
+		String line = new String("");
+		String cvsSplitBy = new String(";");
+		
+		int lastSemId = 0;
+		int lastModId = 0;
+		int lastVerId = 0;
+		int lastLerId = 0;
+		
+		try {
+			br = new BufferedReader(new FileReader(csvFile));
+			line = br.readLine();	//disposing the first line
+			while ((line = br.readLine()) != null) {
+				boolean ws;
+				int year;
+				int week;
+				int modulNr = 0;
+				boolean mc = new Boolean(false);
+				boolean smpp = new Boolean(false);
+				boolean osce = new Boolean(false);
+				boolean relevant = new Boolean(true);
+				boolean lastLineHasNLC = false;
+				LZ_Dimension LzDimension;
+				LZ_Kognitionsdimension LzKognitionsdimension;
+				String[] inputs = new String[10];
+				String vTitle;
+				String description;
+				try{
+					inputs = line.split(cvsSplitBy,10);
+					modulNr = Integer.parseInt(inputs[0].replaceAll("[^\\d.]", ""));
+				} catch (java.lang.NumberFormatException e){
+					semesterListe.get(lastSemId).getSemesterModul(lastModId).getModulVeranstaltung(lastVerId).getVeranstaltungLz(lastLerId).setLzDescription(
+							semesterListe.get(lastSemId).getSemesterModul(lastModId).getModulVeranstaltung(lastVerId).getVeranstaltungLz(lastLerId).getLzDescription()
+							+ inputs
+					);
+					lastLineHasNLC = true;
+				}
+				if(!lastLineHasNLC){
+					if(inputs[1].contains("WiSe") || inputs[1].contains("WS") || inputs[1].contains("ws") || inputs[1].contains("Ws")){
+						ws = true;
+					}
+					else
+					{
+						ws = false;
+					}
+					year = Integer.parseInt(inputs[1].replaceAll("[^\\d.]", ""));
+					
+					week = Integer.parseInt(inputs[2].replaceAll("[^\\d.]", ""));
+					
+					vTitle = new String(inputs[3]);
+					if(Array.getLength(inputs) < 5){	//then at least one newline-chartacter in title of veranstaltung & its the first one
+						do{
+							line = br.readLine();
+							inputs = line.split(cvsSplitBy,15);
+							String hand = new String(vTitle);
+							vTitle = new String(hand + "\n" + inputs[0]);
+						} while(Array.getLength(inputs) < 2);
+						
+						LzDimension = LZ_Dimension.parse(inputs[1]);
+						
+						LzKognitionsdimension = LZ_Kognitionsdimension.parse(inputs[2]);
+						
+						description = new String(inputs[3]);
+						
+						if(Array.getLength(inputs) < 5){	// also lernziel-description contains newline-characters
+							do{
+								line = br.readLine();
+								inputs = line.split(cvsSplitBy,15);
+								String hand = new String(description);
+								description = new String(hand + "\n" + inputs[0]);
+							} while(Array.getLength(inputs) < 2);
+						}
+						else{	//end if contains newline-character in description
+						}
+					}	//end if contains newline-character in title
+					else{
+							//contains no newline-character
+						LzDimension = LZ_Dimension.parse(inputs[4]);
+						
+						LzKognitionsdimension = LZ_Kognitionsdimension.parse(inputs[5]);
+						
+						description = new String(inputs[6]);
+					}
+					
+					if(LzDimension == LZ_Dimension.WissenKenntnisse){
+						osce = true;
+					}
+					if(LzDimension == LZ_Dimension.Fertigkeiten || LzDimension == LZ_Dimension.MiniPa){
+						mc = true;
+					}
+					
+					if((!mc) && (!smpp) && (!osce)){
+						relevant = false;
+					}
+					
+					int semesterId = searchSemester(ws, year);
+					if(semesterId >= 0){
+						int modulId = semesterListe.get(semesterId).searchModul(modulNr);
+						if(modulId >= 0){
+							int veranstaltungId = semesterListe.get(semesterId).getSemesterModul(modulId).searchVeranstaltung(week, vTitle);
+							if(veranstaltungId >= 0){
+								if( !(semesterListe.get(semesterId).getSemesterModul(modulId).getModulVeranstaltung(veranstaltungId).countainsLernziel(description)) ){
+									//nur Lernziel ist neu
+									lernziel newLz = new lernziel(description, mc, smpp, osce, LzDimension, LzKognitionsdimension);
+									newLz.setRelevant(relevant);
+									semesterListe.get(semesterId).getSemesterModul(modulId).getModulVeranstaltung(veranstaltungId).addVeranstaltungLernziel(newLz);
+									
+									lastSemId = semesterId;
+									lastModId = modulId;
+									lastVerId = veranstaltungId;
+									lastLerId = semesterListe.get(semesterId).getSemesterModul(modulId).getModulVeranstaltung(veranstaltungId).getLerListeSize()-1;
+								}
+							}
+							else{
+								//alles einschlieﬂlich Veranstaltung ist neu
+								veranstaltung newVs = new veranstaltung(week, vTitle);
+								semesterListe.get(semesterId).getSemesterModul(modulId).addModulVerantaltung(newVs);
+								veranstaltungId = semesterListe.get(semesterId).getSemesterModul(modulId).veranstaltungen.indexOf(newVs);
+								lernziel newLz = new lernziel(description, mc, smpp, osce, LzDimension, LzKognitionsdimension);
+								newLz.setRelevant(relevant);
+								semesterListe.get(semesterId).getSemesterModul(modulId).getModulVeranstaltung(veranstaltungId).addVeranstaltungLernziel(newLz);
+								
+								lastSemId = semesterId;
+								lastModId = modulId;
+								lastVerId = veranstaltungId;
+								lastLerId = semesterListe.get(semesterId).getSemesterModul(modulId).getModulVeranstaltung(veranstaltungId).getLerListeSize()-1;
+							}
+						}
+						else{
+							//alles einschlieﬂlich Modul ist neu
+							modul newModul = new modul(modulNr);
+							modulId = semesterListe.get(semesterId).module.size();
+							semesterListe.get(semesterId).addSemesterModul(newModul);
+							modulNr = semesterListe.get(semesterId).module.indexOf(newModul);
+							veranstaltung newVs = new veranstaltung(week, vTitle);
+							semesterListe.get(semesterId).getSemesterModul(modulId).addModulVerantaltung(newVs);
+							lernziel newLz = new lernziel(description, mc, smpp, osce, LzDimension, LzKognitionsdimension);
+							newLz.setRelevant(relevant);
+							semesterListe.get(semesterId).getSemesterModul(modulId).getModulVeranstaltung(0).addVeranstaltungLernziel(newLz);
+							
+							lastSemId = semesterId;
+							lastModId = modulId;
+							lastVerId = 0;
+							lastLerId = semesterListe.get(semesterId).getSemesterModul(modulId).getModulVeranstaltung(0).getLerListeSize()-1;
+						}
+					}
+					else{
+						//alles einschlieﬂlich Semester ist neu
+						semester newSem = new semester(year, ws);
+						semesterListe.add(newSem);
+						semesterId = semesterListe.indexOf(newSem);
+						modul newModul = new modul(modulNr);
+						semesterListe.get(semesterId).addSemesterModul(newModul);
+						veranstaltung newVs = new veranstaltung(week, vTitle);
+						semesterListe.get(semesterId).getSemesterModul(0).addModulVerantaltung(newVs);
+						lernziel newLz = new lernziel(description, mc, smpp, osce, LzDimension, LzKognitionsdimension);
+						newLz.setRelevant(relevant);
+						semesterListe.get(semesterId).getSemesterModul(0).getModulVeranstaltung(0).addVeranstaltungLernziel(newLz);
+						
+						lastSemId = semesterId;
+						lastModId = 0;
+						lastVerId = 0;
+						lastLerId = semesterListe.get(semesterId).getSemesterModul(0).getModulVeranstaltung(0).getLerListeSize()-1;
+					}
+				}
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	//TODO: abs‰tze abfangen
+	private void readFileUni10(File file){
 		String csvFile = new String( file.getAbsolutePath() );
 		BufferedReader br = null;
 		String line = new String("");
@@ -327,6 +516,7 @@ public class lernzielnator {
 		}
 	}
 	
+	//TODO: abs‰tze abfangen
 	private void readFileOwn(File file){
 		String csvFile = new String( file.getAbsolutePath() );
 		BufferedReader br = null;
@@ -1626,9 +1816,9 @@ public class lernzielnator {
 			line2 = br.readLine();
 			br.close();
 			file.delete();
-			if( Double.parseDouble(line1.replaceAll("[^\\d.]", "")) != 1.02 ){	//TODO: ACHTUNG: Versionsnummer immer aktualisieren!!!!! Auch unten im Text und im About (mainWindow.java)
+			if( Double.parseDouble(line1.replaceAll("[^\\d.]", "")) != 1.03 ){	//TODO: ACHTUNG: Versionsnummer immer aktualisieren!!!!! Auch unten im Text und im About (mainWindow.java)
 				//Display Error Message
-				JTextArea textarea = new JTextArea("Sie nutzen gerade die Version 1.02.\nDie aktuelle Version ist " + Float.toString((Float.parseFloat(line1.replaceAll("[^\\d.]", "")))) + "\n" + line2);			    
+				JTextArea textarea = new JTextArea("Sie nutzen gerade die Version 1.03.\nDie aktuelle Version ist " + Float.toString((Float.parseFloat(line1.replaceAll("[^\\d.]", "")))) + "\n" + line2);			    
 				textarea.setEditable(false);
 				JOptionPane pane = new JOptionPane(textarea);
 				pane.setMessageType(JOptionPane.ERROR_MESSAGE );				
@@ -1643,6 +1833,6 @@ public class lernzielnator {
 		}		
 	}
 	
-	
+
 	
 }
