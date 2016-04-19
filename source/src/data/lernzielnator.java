@@ -1,3 +1,21 @@
+/*	Lernzielnator - a Programm for the Students of the Berlin Charite
+	University to manage their "Lernziele".
+	Copyright (C) 2016 Heiko Radde
+
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 package data;
 import java.awt.EventQueue;
 import java.io.BufferedOutputStream;
@@ -212,10 +230,10 @@ public class lernzielnator {
 					}
 					
 					if(LzDimension == LZ_Dimension.WissenKenntnisse){
-						osce = true;
+						mc = true;
 					}
 					if(LzDimension == LZ_Dimension.Fertigkeiten || LzDimension == LZ_Dimension.MiniPa){
-						mc = true;
+						osce = true;
 					}
 					
 					if((!mc) && (!smpp) && (!osce)){
@@ -864,7 +882,7 @@ public class lernzielnator {
 					if(modulId >= 0){
 						int veranstaltungId = semesterListe.get(semesterId).getSemesterModul(modulId).searchVeranstaltung(week, vTitle);
 						if(veranstaltungId >= 0){
-							if( !(semesterListe.get(semesterId).getSemesterModul(modulId).getModulVeranstaltung(veranstaltungId).countainsLernziel(inputs[6])) ){
+							if( !(semesterListe.get(semesterId).getSemesterModul(modulId).getModulVeranstaltung(veranstaltungId).countainsLernziel(description)) ){
 								//nur Lernziel ist neu
 								lernziel newLz = new lernziel(description, notes, mc, smpp, osce, LzDimension, karteikarten, ausarbeitung, lerngruppe, LzKognitionsdimension, relevant);
 								newLz.setRelevant(relevant);
@@ -1816,9 +1834,9 @@ public class lernzielnator {
 			line2 = br.readLine();
 			br.close();
 			file.delete();
-			if( Double.parseDouble(line1.replaceAll("[^\\d.]", "")) != 1.03 ){	//TODO: ACHTUNG: Versionsnummer immer aktualisieren!!!!! Auch unten im Text und im About (mainWindow.java)
+			if( Double.parseDouble(line1.replaceAll("[^\\d.]", "")) != 1.04 ){	//TODO: ACHTUNG: Versionsnummer immer aktualisieren!!!!! Auch unten im Text und im About (mainWindow.java)
 				//Display Error Message
-				JTextArea textarea = new JTextArea("Sie nutzen gerade die Version 1.03.\nDie aktuelle Version ist " + Float.toString((Float.parseFloat(line1.replaceAll("[^\\d.]", "")))) + "\n" + line2);			    
+				JTextArea textarea = new JTextArea("Du nutzt gerade die Version 1.04.\nDie aktuelle Version ist " + Float.toString((Float.parseFloat(line1.replaceAll("[^\\d.]", "")))) + "\n" + line2);			    
 				textarea.setEditable(false);
 				JOptionPane pane = new JOptionPane(textarea);
 				pane.setMessageType(JOptionPane.ERROR_MESSAGE );				

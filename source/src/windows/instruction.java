@@ -1,3 +1,21 @@
+/*	Lernzielnator - a Programm for the Students of the Berlin Charite
+	University to manage their "Lernziele".
+	Copyright (C) 2016 Heiko Radde
+
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 package windows;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -17,7 +35,7 @@ public class instruction extends JFrame {
 	private JPanel contentPane;
 	
 	private String txtImportData = new String("Dieses Programm kann vom einzelnen Lernziel bis zum ganzen Semester alles importieren, was in einer .csv Datei gespeichert ist.\n"
-			+ "Hierzu lädst du zuerst das gewünschte Modul als Excel-Datei von der Lernzielplattform herunter. "
+			+ "Hierzu lädst du zuerst das gew\u00fcnschte Modul als Excel-Datei von der Lernzielplattform herunter. "
 			+ "Nun gehst du auf „Speichern unter“ und wählst als Dateityp „CSV“ aus.\n"
 			+ "(Achte darauf, nicht den Eintrag mit „MS-DOS“ zu nehmen).");
 	
@@ -36,32 +54,17 @@ public class instruction extends JFrame {
 			+ "[<--]   --> Eintrag entfernen\n");
 	
 	private String txtLoadData = new String("Am Einfachsten speicherst du alles immer in derselben .csv Datei, die du nennen kannst, wie du willst.\n"
-			+ "Dafür will diese Datei dann auch nicht von dir gelöscht werden. "
+			+ "Daf\u00fcr will diese Datei dann auch nicht von dir gel\u00f6scht werden. "
 			+ "Sondern jedes Mal wieder geladen.");
 	
-	private String txtExport = new String("Möchtest du von einzelnen Semestern/Modulen deinen Lernfortschritt, "
+	private String txtExport = new String("M\u00f6chtest du von einzelnen Semestern/Modulen deinen Lernfortschritt, "
 			+ "deine Notizen oder selbst erstellten Lernziele mit deinen Kommilitonen teilen, kannst du sie als .csv exportieren.");
 	
-	private String txtMisc = new String("Der kleine weiße Streigen im Pie-Chart:\n"
-			+ "Da das Programm nicht rundet sondern immer einige Ziffern hinter dem Komma abschneidet, kommt man bei der Addition aller Zahlen in seinem schönen Tortendiagramm nie auf die vollen 100%.\n"
+	private String txtMisc = new String("Der kleine wei\u00dfe Streigen im Pie-Chart:\n"
+			+ "Da das Programm nicht rundet sondern immer einige Ziffern hinter dem Komma abschneidet, kommt man bei der Addition aller Zahlen in seinem sch\u00f6nen Tortendiagramm nie auf die vollen 100%.\n"
 			+ "\n"
-			+ "Heiko hat für seine ~5600 Zeilen Code zwei Tafeln Schokolade bekommen.");
+			+ "Heiko hat f\u00fcr seine ~5700 Zeilen Code zwei Tafeln Schokolade bekommen.");
 		//TODO: Update Lines of code ^
-	/**
-	 * Launch the application.
-	 */
-	/*public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					instruction frame = new instruction();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
 
 	/**
 	 * Create the frame.
@@ -71,6 +74,8 @@ public class instruction extends JFrame {
 		setAlwaysOnTop(true);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 500, 400);
+		setLocationRelativeTo(frame);
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);

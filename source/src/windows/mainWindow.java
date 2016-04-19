@@ -1,3 +1,21 @@
+/*	Lernzielnator - a Programm for the Students of the Berlin Charite
+	University to manage their "Lernziele".
+	Copyright (C) 2016 Heiko Radde
+
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 package windows;
 import javax.swing.JOptionPane;
 
@@ -191,7 +209,7 @@ public class mainWindow {
 		    @Override
 		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
 		        if (JOptionPane.showConfirmDialog(getFrmLernzielnator(), 
-		            "Hast du gespeichert, was du speichern wollen?", "Wirklich schließen?", 
+		            "Hast du gespeichert, was du speichern wolltest?", "Wirklich schlie\u00dfen?", 
 		            JOptionPane.YES_NO_OPTION,
 		            JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
 		            System.exit(0);
@@ -601,8 +619,8 @@ public class mainWindow {
 			}
 		});
 		popup.add(popUpEdit);
-		JMenuItem popUpDelete = new JMenuItem("Löschen");
-		popUpDelete.setToolTipText("Lösche die ausgewählte Node.");
+		JMenuItem popUpDelete = new JMenuItem("L\u00f6schen");
+		popUpDelete.setToolTipText("L\u00f6sche die ausgewählte Node.");
 		popUpDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				deleteNode();
@@ -626,7 +644,7 @@ public class mainWindow {
 		});
 		popup.add(popUpDown);
 		JMenuItem popUpSort = new JMenuItem("Sortieren");
-		popUpSort.setToolTipText("Sortiert alle zu dieser Node gehörende Einträge");
+		popUpSort.setToolTipText("Sortiert alle zu dieser Node geh\u00f6rende Einträge");
 		popUpSort.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				sort();
@@ -1186,14 +1204,14 @@ public class mainWindow {
 		        
 			}
 		});
-		mntmImportieren.setToolTipText("Fügt Inhalt einer Datei dem Datensatz hinzu");
+		mntmImportieren.setToolTipText("F\u00fcgt Inhalt einer Datei dem Datensatz hinzu");
 		mnData.add(mntmImportieren);		
 		
 		JMenu mnEdit = new JMenu("Edit");
 		menuBar.add(mnEdit);
 		
 		JMenuItem mntmLsche = new JMenuItem("L\u00F6sche");
-		mntmLsche.setToolTipText("Lösche die ausgewählte Node");
+		mntmLsche.setToolTipText("L\u00f6sche die ausgewählte Node");
 		mntmLsche.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				deleteNode();
@@ -1229,7 +1247,7 @@ public class mainWindow {
 		mnEdit.add(mntmDown);
 		
 		JMenuItem mntmSort = new JMenuItem("Sortieren");
-		mntmSort.setToolTipText("Sortiert alle zu dieser Node gehörende Einträge");
+		mntmSort.setToolTipText("Sortiert alle zu dieser Node geh\u00f6rende Einträge");
 		mntmSort.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				sort sortDialog = new sort(getFrmLernzielnator(), mainWindow.this);
@@ -1265,7 +1283,7 @@ public class mainWindow {
 					JOptionPane pane = new JOptionPane(null);
 				    //configure
 					pane.setMessageType(JOptionPane.ERROR_MESSAGE );
-					pane.setMessage("Keine Semester vorhanden.\nBitte zuerst Semesteer hinzufügen!");
+					pane.setMessage("Keine Semester vorhanden.\nBitte zuerst Semesteer hinzuf\u00fcgen!");
 				    JDialog dialogError = pane.createDialog("Error");
 				    dialogError.setLocation(getFrmLernzielnator().getLocation().x +  + (getFrmLernzielnator().getWidth()/2) - (dialogError.getBounds().width/2) , getFrmLernzielnator().getLocation().y + (getFrmLernzielnator().getHeight()/2) - (dialogError.getBounds().height/2) );
 				    dialogError.setVisible(true);
@@ -1347,10 +1365,10 @@ public class mainWindow {
 					pane.setMessageType(JOptionPane.ERROR_MESSAGE );
 					switch(error){
 					case 1:
-						pane.setMessage("Die Veranstaltung, zu der das Lernziel gehört, auwählen!");
+						pane.setMessage("Die Veranstaltung, zu der das Lernziel geh\u00f6rt, auwählen!");
 						break;
 					case 2:
-						pane.setMessage("Die Veranstaltung, zu der das Lernziel gehört, auwählen!");
+						pane.setMessage("Die Veranstaltung, zu der das Lernziel geh\u00f6rt, auwählen!");
 						break;
 					}
 				    JDialog dialogError = pane.createDialog("Error");
@@ -1518,13 +1536,8 @@ public class mainWindow {
 		JMenuItem mntmAbout = new JMenuItem("About");
 		mntmAbout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane pane = new JOptionPane(null);
-			    //configure
-				pane.setMessageType(JOptionPane.INFORMATION_MESSAGE );
-				pane.setMessage("Lernzielnator\nVersion 1.01\n\nAutor: Heiko Radde\nTexte: Sonja Radde\n\nKontakt (Heiko Radde):\ns61717@beuth-hochschule.de");
-			    JDialog dialog = pane.createDialog("About");
-			    dialog.setLocation(getFrmLernzielnator().getLocation().x +  + (getFrmLernzielnator().getWidth()/2) - (dialog.getBounds().width/2) , getFrmLernzielnator().getLocation().y + (getFrmLernzielnator().getHeight()/2) - (dialog.getBounds().height/2) );
-			    dialog.setVisible(true);
+				about aboutWindow = new about(getFrmLernzielnator());
+				aboutWindow.setVisible(true);
 			}
 		});
 		
@@ -1932,7 +1945,7 @@ public class mainWindow {
 			JOptionPane pane = new JOptionPane(null);
 		    //configure
 			pane.setMessageType(JOptionPane.ERROR_MESSAGE );
-			pane.setMessage("Bitte eine zu löschende Node auswählen!");
+			pane.setMessage("Bitte eine zu l\u00f6schende Node auswählen!");
 		    JDialog dialogError = pane.createDialog("Error");
 		    dialogError.setLocation(getFrmLernzielnator().getLocation().x +  + (getFrmLernzielnator().getWidth()/2) - (dialogError.getBounds().width/2) , getFrmLernzielnator().getLocation().y + (getFrmLernzielnator().getHeight()/2) - (dialogError.getBounds().height/2) );
 		    dialogError.setVisible(true);
@@ -1992,7 +2005,7 @@ public class mainWindow {
 				pane.setMessage("Bitte eine Node auswählen!");
 				break;
 			case 3:
-				pane.setMessage("Lernziele haben keine subNodes, welche sortiert werden könnten.");
+				pane.setMessage("Lernziele haben keine subNodes, welche sortiert werden k\u00f6nnten.");
 				break;
 			}
 		    JDialog dialogError = pane.createDialog("Error");

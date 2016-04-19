@@ -1,3 +1,21 @@
+/*	Lernzielnator - a Programm for the Students of the Berlin Charite
+	University to manage their "Lernziele".
+	Copyright (C) 2016 Heiko Radde
+
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 package windows;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -26,19 +44,6 @@ public class statistik extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 
 	/**
-	 * Launch the application.
-	 */
-	/*public static void main(String[] args) {
-		try {
-			statistik dialog = new statistik();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}*/
-
-	/**
 	 * Create the dialog.
 	 */
 	public statistik(final JFrame frame, final mainWindow mainWindow,int semester, int module, int veranstaltungen, int lernziele, int rot, int gelb, int gruen, int grau, int MC, int SMPP, int OSCE, int karteikarten, int ausarbeitung, int lerngruppen, int notes, int relevant, Color ok, Color mittel, Color schlecht, Color neutral ) {
@@ -46,6 +51,8 @@ public class statistik extends JDialog {
 		getContentPane().setLayout(new BorderLayout());
 		setTitle("Statistik");
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setLocationRelativeTo(frame);
+		
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		{
 			JPanel buttonPane = new JPanel();
@@ -65,7 +72,7 @@ public class statistik extends JDialog {
 		}
 		
 		String text = new String("Insgesamt " + Integer.toString(lernziele) + " Lernziele, davon:\n  "
-				+Integer.toString(gruen) + " vollständig bearbeitet (grün)\n  " 
+				+Integer.toString(gruen) + " vollständig bearbeitet (gr\u00fcn)\n  " 
 				+ Integer.toString(gelb) + " teilweise bearbeitet (gelb)\n  "
 				+ Integer.toString(rot) + " nicht bearbeitet (rot)\n  "
 				+ Integer.toString(grau) + " nicht relevant (grau),\n  "
