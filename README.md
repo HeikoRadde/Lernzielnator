@@ -14,11 +14,12 @@ Dein Tortendiagramm siehst du unter ?, Statistik.
 
 Viel Spaß! 
 
-*Achtung:*
-Es dürfen keinesfalls Absätze Texte gelangen! D.h. keine Absätze in den Notizen, keine Absätze in den Beschreibungen und keine Absätze in den Titeln!
-
 \*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*
 
 Design & Coding von Heiko Radde
 
 Idee & Texte von Sonja Radde
+
+FAQ:
+--Es werden keine Umlaute in Titel der Vorlesung oder in der Beschreibung des Lernzieles angezeigt.
+--->Die excel-Datei wurde falsch als .csv gespeichert. Es muss darauf geachtet werden, dass NICHT die MS-DOS Variante genutzt wird. Diese (und eventuell auch andere) Variante verwirft Zeichen wie die deutschen Umlaute.
