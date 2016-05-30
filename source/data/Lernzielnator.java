@@ -761,7 +761,6 @@ public class Lernzielnator {
 		BufferedReader br = null;
 		String line = new String("");
 		String cvsSplitBy = new String(";");
-		
 		try {
 			br = new BufferedReader(new FileReader(csvFile));
 			line = br.readLine();	//disposing the first line
@@ -778,13 +777,13 @@ public class Lernzielnator {
 				boolean karteikarten = new Boolean (false);
 				boolean ausarbeitung  = new Boolean (false);
 				boolean lerngruppe  = new Boolean (false);
-				boolean relevant = new Boolean(true);
+				boolean relevant = new Boolean(false);
 				String[] inputs = new String[15];
 				String description;
 				String notes;
 				String vTitle;
 				
-				inputs = line.split(cvsSplitBy,15);
+				inputs = line.split(cvsSplitBy,16);
 				try{
 					modulNr = Integer.parseInt(inputs[0].replaceAll("[^\\d.]", ""));
 				} catch(NumberFormatException e1){
@@ -2265,9 +2264,9 @@ public class Lernzielnator {
 			line2 = br.readLine();
 			br.close();
 			file.delete();
-			if( Double.parseDouble(line1.replaceAll("[^\\d.]", "")) != 1.1 ){	//TODO: ACHTUNG: Versionsnummer immer aktualisieren!!!!! Auch unten im Text und im About (mainWindow.java)
+			if( Double.parseDouble(line1.replaceAll("[^\\d.]", "")) != 1.11 ){	//TODO: ACHTUNG: Versionsnummer immer aktualisieren!!!!! Auch unten im Text und im About (mainWindow.java)
 				//Display Error Message
-				JTextArea textarea = new JTextArea("Du nutzt gerade die Version 1.1.\nDie aktuelle Version ist " + Float.toString((Float.parseFloat(line1.replaceAll("[^\\d.]", "")))) + "\n" + line2);			    
+				JTextArea textarea = new JTextArea("Du nutzt gerade die Version 1.11.\nDie aktuelle Version ist " + Float.toString((Float.parseFloat(line1.replaceAll("[^\\d.]", "")))) + "\n" + line2);			    
 				textarea.setEditable(false);
 				JOptionPane pane = new JOptionPane(textarea);
 				pane.setMessageType(JOptionPane.ERROR_MESSAGE );				

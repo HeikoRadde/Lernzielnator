@@ -204,7 +204,7 @@ public class EditLernziel extends JDialog {
 		
 		chckbxNotRelevant = new JCheckBox("nicht relevant");
 		chckbxNotRelevant.setFont(newStandFontPlain);
-		chckbxNotRelevant.setSelected(lernziel.isRelevant());
+		chckbxNotRelevant.setSelected(!lernziel.isRelevant());
 		chckbxNotRelevant.setToolTipText("Wird automatisch gesetzt, wenn LZ nicht f\u00FCr MC oder SMPP relevant ist.\r\nKann manuell gesetzt werden.\r\nNicht relevante LZ's werden im Fortschritt nicht mitgez\u00E4hlt.");
 		chckbxNotRelevant.setBounds(0, 54, 253, 23);
 		panelBottomRight.add(chckbxNotRelevant);

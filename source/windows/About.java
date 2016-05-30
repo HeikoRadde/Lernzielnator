@@ -86,7 +86,7 @@ public class About extends JDialog {
 		
 		//TODO aktualisiere Versionsnummer bei jedem Release
 		String mainInfoText = new String("Lernzielnator\n"
-				+ "Version 1.1\n"
+				+ "Version 1.11\n"
 				+ "\n"
 				+ "Autor: Heiko Radde\n"
 				+ "Texte: Sonja Radde\n"
